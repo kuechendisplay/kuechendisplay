@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-18T17:20:48.368Z",
+  "updated": "2026-11-18T23:07:49.465Z",
   "days": {
-    "2026-11-18": {
-      "dish": {
-        "name": "Pilzrisotto",
-        "url": "https://www.chefkoch.de/rezepte/92011036083345/Pilzrisotto.html",
-        "image": "https://img.chefkoch-cdn.de/rezepte/92011036083345/bilder/1365534/crop-960x540/pilzrisotto.jpg"
-      },
-      "bake": {
-        "name": "Russischer Zupfkuchen",
-        "url": "https://www.einfachbacken.de/rezepte/russischer-zupfkuchen-omas-rezept",
-        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-07/russischer_zupfkuchen-2-png-converted.jpg?h=a1e1a043&itok=_XCz6Ztb"
-      }
-    },
     "2026-11-19": {
       "dish": {
         "name": "Tortellini in Sahnesoße",
@@ -23,6 +11,18 @@
         "name": "Streuselkuchen",
         "url": "https://www.einfachbacken.de/rezepte/streuselkuchen-omas-klassiker-rezept",
         "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2025-10/2020_Streuselkuchen_Aufmacher.jpg?h=ff0e8cdc&itok=w-A1UKae"
+      }
+    },
+    "2026-11-20": {
+      "dish": {
+        "name": "Kartoffelgratin",
+        "url": "https://www.chefkoch.de/rs/s0/Kartoffelgratin/Rezepte.html",
+        "image": null
+      },
+      "bake": {
+        "name": "Mohnkuchen",
+        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Mohnkuchen",
+        "image": null
       }
     }
   },

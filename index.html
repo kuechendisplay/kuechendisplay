@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Küche</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F2F7; --card:#FFFFFF; --card-press:#E5E5EA;
+  --label:#000000; --label-2:rgba(60,60,67,.6); --label-3:rgba(60,60,67,.3); --sep:rgba(60,60,67,.18);
+  --track:rgba(120,120,128,.16); --fill-idle:#3A3A3C; --hairline:rgba(0,0,0,.08);
+  --orange:#FF9500; --orange-ink:#C93400; --green:#34C759; --green-ink:#248A3D; --red:#FF3B30; --pink:#FF2D55;
+  --tint-green:rgba(52,199,89,.16); --tint-orange:rgba(255,149,0,.16); --tint-gray:rgba(120,120,128,.16);
+  --scrim:rgba(0,0,0,.3);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --card:#1C1C1E; --card-press:#2C2C2E;
+    --label:#FFFFFF; --label-2:rgba(235,235,245,.6); --label-3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
+    --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --hairline:rgba(255,255,255,.08);
+    --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A; --pink:#FF375F;
+    --tint-green:rgba(48,209,88,.2); --tint-orange:rgba(255,159,10,.2); --tint-gray:rgba(120,120,128,.32);
+    --scrim:rgba(0,0,0,.55);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --card:#1C1C1E; --card-press:#2C2C2E;
+  --label:#FFFFFF; --label-2:rgba(235,235,245,.6); --label-3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
+  --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --hairline:rgba(255,255,255,.08);
+  --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A; --pink:#FF375F;
+  --tint-green:rgba(48,209,88,.2); --tint-orange:rgba(255,159,10,.2); --tint-gray:rgba(120,120,128,.32);
+  --scrim:rgba(0,0,0,.55);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+html{background:var(--bg)}
+body{
+  background:var(--bg); color:var(--label);
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-feature-settings:"cv11","ss03";
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none; user-select:none;
+  overscroll-behavior:none;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+
+/* ---------- Layout ---------- */
+.board{
+  height:100%;
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr) auto;
+  gap:16px;
+  padding:20px max(24px,env(safe-area-inset-right,0px)) 24px max(24px,env(safe-area-inset-left,0px));
+}
+
+/* ---------- Uhr ---------- */
+.clock{grid-column:1;grid-row:1;display:flex;flex-direction:column;justify-content:center;padding:0 8px 0 10px;min-width:0}
+.time{
+  font-size:min(15vw,30vh); font-weight:600; line-height:.9;
+  letter-spacing:-.045em; font-variant-numeric:tabular-nums; margin-left:-.04em;
+}
+.date{margin:.55em 0 0;font-size:clamp(20px,2.4vw,32px);font-weight:500;letter-spacing:-.012em;color:var(--label-2)}
+
+/* ---------- Karten rechts ---------- */
+.side{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:14px;min-height:0}
+.card{background:var(--card);border-radius:22px;overflow:hidden}
+.source{flex:1;display:flex;flex-direction:column;min-height:0}
+.row{display:flex;align-items:center;gap:12px;padding:10px 16px 10px 14px;min-height:56px;transition:background-color .15s}
+.glyph{flex:none;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--accent)}
+.glyph svg{width:23px;height:23px;color:#fff;stroke:#fff}
+.row-name{flex:1;min-width:0;font-size:18px;font-weight:600;letter-spacing:-.012em}
+.chev{flex:none;width:17px;height:17px;fill:none;stroke:var(--label-3);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.idea{
+  position:relative;flex:1;min-height:0;
+  display:flex;align-items:center;gap:18px;
+  padding:14px 14px 14px 64px;transition:background-color .15s;
+  container-type:size;
+}
+.idea::before{content:"";position:absolute;top:0;left:64px;right:0;height:1px;background:var(--sep)}
+.idea-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.idea-label{font-size:14px;color:var(--label-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.idea-title{
+  font-size:clamp(20px,2.1vw,27px);font-weight:650;letter-spacing:-.02em;line-height:1.14;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
+}
+.video .idea-title{font-size:clamp(16px,1.5vw,19px);font-weight:600;letter-spacing:-.008em;line-height:1.26;-webkit-line-clamp:3}
+.row:active,.idea:active{background:var(--card-press)}
+
+/* ---------- Vorschaubilder ---------- */
+.thumb{
+  position:relative;flex:none;height:88px;aspect-ratio:4/3;border-radius:14px;overflow:hidden;
+  display:grid;place-items:center;
+  background:var(--track);
+  background:color-mix(in srgb, var(--accent) 15%, var(--card));
+}
+.thumb.wide{aspect-ratio:16/9}
+/* Vorschaubild füllt die Höhe der Kachel, höchstens 46 % der Breite */
+@supports (height:1cqh){ .thumb{height:100cqh;max-width:46cqw} }
+.thumb::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px var(--hairline);pointer-events:none}
+.thumb .ph{width:34px;height:34px;color:var(--accent);stroke:var(--accent);transition:opacity .3s}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease}
+.thumb.has-img img{opacity:1}
+.thumb.has-img .ph{opacity:0}
+.play{
+  position:absolute;z-index:1;width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;background:rgba(0,0,0,.42);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  opacity:0;transition:opacity .45s;
+}
+.play svg{width:16px;height:16px;color:#fff;margin-left:2px}
+.thumb.has-img .play{opacity:1}
+
+/* ---------- Timer ---------- */
+.timer{
+  grid-column:1 / -1;grid-row:2;
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:28px;
+  padding:20px 26px 20px 28px;
+}
+.readout{width:190px;display:flex;flex-direction:column;gap:4px}
+.readout-time{font-size:58px;font-weight:600;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.readout-state{font-size:15px;color:var(--label-2);white-space:nowrap}
+.slider-wrap{display:flex;flex-direction:column;gap:10px;padding-top:8px}
+.slider{position:relative;height:72px;border-radius:999px;background:var(--track);overflow:hidden;touch-action:none;cursor:grab;isolation:isolate}
+.fill{
+  position:absolute;inset:0;background:var(--fill-idle);
+  transform:translateX(-50%);will-change:transform;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),background-color .3s,opacity .3s;
+}
+.slider.dragging .fill{transition:background-color .3s,opacity .3s}
+.slider.dragging{cursor:grabbing}
+.timer[data-status="running"] .fill{background:var(--orange);transition:background-color .3s,opacity .3s}
+.timer[data-status="paused"] .fill{background:var(--orange);opacity:.45}
+.timer[data-status="done"] .fill{background:var(--red)}
+.timer:not([data-status="idle"]) .slider{cursor:default}
+.ticks{position:relative;height:18px;font-size:13px;font-weight:500;color:var(--label-2);font-variant-numeric:tabular-nums}
+.tick{position:absolute;top:0;transform:translateX(-50%)}
+.tick.last{transform:translateX(-100%)}
+.actions{display:flex;gap:20px;padding:6px}
+.round{
+  width:96px;height:96px;border-radius:50%;display:grid;place-items:center;
+  font-size:15px;font-weight:600;letter-spacing:-.01em;
+  transition:transform .12s,opacity .2s,background-color .2s,color .2s,box-shadow .2s;
+}
+.round:active{transform:scale(.95)}
+.r-gray{background:var(--tint-gray);color:var(--label);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-gray)}
+.r-gray:disabled{opacity:.35;cursor:default;transform:none}
+.r-green{background:var(--tint-green);color:var(--green-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-green)}
+.r-orange{background:var(--tint-orange);color:var(--orange-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-orange)}
+
+/* ---------- Alarm ---------- */
+.alarm{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:var(--scrim);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.alarm[hidden]{display:none}
+.sheet{width:min(440px,100%);background:var(--card);border-radius:28px;padding:32px 28px 24px;text-align:center;animation:pop .35s cubic-bezier(.2,.9,.25,1.1)}
+.sheet h2{margin:0;font-size:30px;font-weight:700;letter-spacing:-.025em}
+.sheet p{margin:8px 0 26px;font-size:17px;color:var(--label-2)}
+.stop{width:100%;height:60px;border-radius:16px;background:var(--orange);color:#fff;font-size:20px;font-weight:600}
+.stop:active{opacity:.85}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Hochformat / kleine Displays ---------- */
+@media (max-aspect-ratio: 1/1), (max-width: 760px){
+  html,body{height:auto;min-height:100%}
+  .board{height:auto;min-height:100%;grid-template-columns:minmax(0,1fr);grid-template-rows:none}
+  .clock,.side,.timer{grid-column:1;grid-row:auto}
+  .clock{padding:32px 8px 24px}
+  .time{font-size:min(26vw,20vh)}
+  .idea{min-height:150px;height:150px}
+  .timer{grid-template-columns:minmax(0,1fr) auto;gap:20px}
+  .slider-wrap{grid-column:1 / -1;grid-row:2}
+  .readout{width:auto}
+}
+@media (max-width: 520px){ .idea{padding-left:20px;height:120px;min-height:120px} .idea::before{left:20px} }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-fork" viewBox="0 0 24 24"><path d="M6 3v5a2 2 0 0 0 4 0V3M8 10v11M17.5 21V3c-2.2 1.3-3.2 4-3.2 8h3.2"/></symbol>
+  <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 20h16M5.5 20v-7.5h13V20M5.5 15.5c1.6 1 3.1 1 4.6 0s3.1-1 4.6 0 3.1 1 3.8 0M12 12.5V9"/><path stroke="none" fill="currentColor" d="M12 4.2c.9 1 1.4 1.8 1.4 2.5a1.4 1.4 0 0 1-2.8 0c0-.7.5-1.5 1.4-2.5z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path stroke="none" fill="currentColor" d="M8 5.6v12.8L18.4 12z"/></symbol>
+</svg>
+
+<main class="board">
+  <section class="clock" aria-label="Uhrzeit">
+    <time class="time" id="time">--:--</time>
+    <p class="date" id="date"></p>
+  </section>
+
+  <section class="side" aria-label="Rezepte und Videos">
+    <article class="card source" style="--accent:var(--green)">
+      <a class="row" id="ckHome" href="https://www.chefkoch.de/" target="_blank" rel="noopener">
+        <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-fork"/></svg></span>
+        <span class="row-name">Chefkoch</span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a class="idea" id="dishLink" href="#" target="_blank" rel="noopener">
+        <span class="idea-text">
+          <span class="idea-label">Idee für heute</span>
+          <span class="idea-title" id="dishName"></span>
+        </span>
+        <span class="thumb" id="dishThumb"><svg class="i ph" aria-hidden="true"><use href="#i-fork"/></svg></span>
+      </a>
+    </article>
+
+    <article class="card source" style="--accent:var(--pink)">
+      <a class="row" id="ebHome" href="https://www.einfachbacken.de/" target="_blank" rel="noopener">
+        <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-cake"/></svg></span>
+        <span class="row-name">Einfach Backen</span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a class="idea" id="bakeLink" href="#" target="_blank" rel="noopener">
+        <span class="idea-text">
+          <span class="idea-label">Idee für heute</span>
+          <span class="idea-title" id="bakeName"></span>
+        </span>
+        <span class="thumb" id="bakeThumb"><svg class="i ph" aria-hidden="true"><use href="#i-cake"/></svg></span>
+      </a>
+    </article>
+
+    <article class="card source video" style="--accent:var(--red)">
+      <a class="row" id="ytHome" href="https://www.youtube.com/@dailyceddo/videos" target="_blank" rel="noopener">
+        <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-play"/></svg></span>
+        <span class="row-name">Daily Ceddo</span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <a class="idea" id="videoLink" href="#" target="_blank" rel="noopener">
+        <span class="idea-text">
+          <span class="idea-label" id="videoLabel">Neuestes Video</span>
+          <span class="idea-title" id="videoTitle">Neueste Videos ansehen</span>
+        </span>
+        <span class="thumb wide" id="videoThumb">
+          <svg class="i ph" aria-hidden="true"><use href="#i-play"/></svg>
+          <span class="play" aria-hidden="true"><svg class="i"><use href="#i-play"/></svg></span>
+        </span>
+      </a>
+    </article>
+  </section>
+
+  <section class="card timer" id="timer" data-status="idle" aria-label="Timer">
+    <div class="readout">
+      <span class="readout-time" id="tTime">10:00</span>
+      <span class="readout-state" id="tState">Zum Einstellen ziehen</span>
+    </div>
+    <div class="slider-wrap">
+      <div class="slider" id="slider" role="slider" tabindex="0" aria-label="Timerdauer in Minuten" aria-valuemin="1" aria-valuemax="45" aria-valuenow="10" aria-valuetext="10 Minuten">
+        <div class="fill" id="fill"></div>
+      </div>
+      <div class="ticks" id="ticks" aria-hidden="true"></div>
+    </div>
+    <div class="actions">
+      <button class="round r-gray" id="btnCancel" type="button" disabled>Abbrechen</button>
+      <button class="round r-green" id="btnMain" type="button">Start</button>
+    </div>
+  </section>
+</main>
+
+<div class="alarm" id="alarm" hidden>
+  <div class="sheet" role="alertdialog" aria-labelledby="alarmTitle" aria-describedby="alarmText">
+    <h2 id="alarmTitle">Timer abgelaufen</h2>
+    <p id="alarmText"></p>
+    <button class="stop" id="btnStop" type="button">Stopp</button>
+  </div>
+</div>
+
+<script id="shared">
+/* =====================================================================
+   Konfiguration – wird auch vom Updater (scripts/update.mjs) aus dieser Datei gelesen.
+   Ideen-Einträge sind ein Text oder { n: "Name", m: [Monate 1–12] } –
+   dann erscheinen sie nur in diesen Monaten.
+   ===================================================================== */
+(function (root) {
+  "use strict";
+
+  const CONFIG = {
+    youtube: "https://www.youtube.com/@dailyceddo/videos",
+    youtubeChannelId: "UC-QOcOL01vuShdAk01YzDmw",   // Fallback, falls der Handle nicht auflösbar ist
+    chefkoch: "https://www.chefkoch.de/",
+    backen: "https://www.einfachbacken.de/",
+    chefkochSearch: q => "https://www.chefkoch.de/rs/s0/" + encodeURIComponent(q) + "/Rezepte.html",
+    // Einfach Backen hat keine stabile Such-URL: DuckDuckGo mit „\“ springt direkt zum ersten Treffer.
+    backenSearch: q => "https://duckduckgo.com/?q=" + encodeURIComponent("\\site:einfachbacken.de " + q),
+    feedRefreshMinutes: 20,
+    steps: [1,2,3,4,5,6,7,8,9,10,12,15,20,25,30,35,40,45],
+    ticks: [1,5,10,15,20,30,45],
+    defaultMinutes: 10,
+    dishes: [
+      "Käsespätzle","Linsen mit Spätzle","Gaisburger Marsch","Maultaschen in Brühe","Schupfnudeln mit Sauerkraut",
+      "Spaghetti Carbonara","Pasta Puttanesca","Lasagne","Tortellini in Sahnesoße","Gnocchi in Salbeibutter",
+      "Pilzrisotto","Chili con Carne","Gulasch","Rinderrouladen","Königsberger Klopse","Frikadellen","Hackbraten",
+      "Gefüllte Paprika","Kartoffelgratin","Bauernfrühstück","Ofenkartoffel mit Kräuterquark","Flammkuchen",
+      "Quiche Lorraine","Hühnerfrikassee","Hähnchen-Curry","Butter Chicken","Rotes Thai-Curry","Pad Thai",
+      "Ramen","Bibimbap","Teriyaki-Lachs","Lachs mit Ofenkartoffeln","Shakshuka","Falafel mit Hummus",
+      "Couscous-Salat","Moussaka","Ratatouille","Ofengemüse mit Feta","Dal","Burrito Bowl","Enchiladas",
+      "Gyros-Pfanne","Saltimbocca","Wiener Schnitzel","Zwiebelrostbraten","Kaiserschmarrn","Pfannkuchen",
+      "Dampfnudeln","Semmelknödel mit Rahmschwammerl","Spinatknödel","Minestrone","Pasta e Fagioli",
+      "Tomatensuppe","Kartoffelsuppe","Linsensuppe",
+      { n: "Kürbissuppe", m: [9,10,11] }, { n: "Zwiebelkuchen", m: [9,10] },
+      { n: "Spargel mit Sauce Hollandaise", m: [4,5,6] }, { n: "Bärlauch-Pesto Pasta", m: [3,4] },
+      { n: "Grillgemüse-Salat", m: [6,7,8] }, { n: "Sauerbraten", m: [11,12,1,2] },
+      { n: "Grünkohl mit Kartoffeln", m: [11,12,1,2] }
+    ],
+    bakes: [
+      "Apfelkuchen","Käsekuchen","Bananenbrot","Marmorkuchen","Zitronenkuchen","Schwarzwälder Kirschtorte",
+      "Rüblitorte","Hefezopf","Zimtschnecken","Brownies","Schoko-Muffins","Blaubeer-Muffins","Donauwelle",
+      "Bienenstich","Streuselkuchen","Apfelstrudel","Linzer Torte","Butterkuchen","Russischer Zupfkuchen",
+      "Franzbrötchen","Laugenbrezeln","Dinkelbrot","Focaccia","Waffeln","Cookies","Mohnkuchen",
+      "Eierlikörkuchen","Nusszopf","Quarkbällchen","Rotweinkuchen","Amerikaner","Windbeutel",
+      { n: "Erdbeerkuchen", m: [5,6,7] }, { n: "Rhabarberkuchen", m: [4,5,6] },
+      { n: "Zwetschgendatschi", m: [8,9] }, { n: "Kirschstreusel", m: [6,7] },
+      { n: "Vanillekipferl", m: [11,12] }, { n: "Zimtsterne", m: [11,12] }, { n: "Lebkuchen", m: [11,12] },
+      { n: "Christstollen", m: [11,12] }, { n: "Spekulatius", m: [11,12] }, { n: "Kokosmakronen", m: [11,12] }
+    ]
+  };
+
+  function mix(n) {
+    n = (n ^ 61) ^ (n >>> 16); n = n + (n << 3); n = n ^ (n >>> 4);
+    n = Math.imul(n, 0x27d4eb2d); n = n ^ (n >>> 15); return n >>> 0;
+  }
+  const nameOf = x => typeof x === "string" ? x : x.n;
+  function pick(list, day, month, salt) {
+    const season = list.filter(x => typeof x === "string" || !x.m || x.m.includes(month));
+    const pool = season.length ? season : list;
+    const n = pool.length;
+    let i = mix(day * 7919 + salt) % n;
+    if (i === mix((day - 1) * 7919 + salt) % n) i = (i + 1) % n;   // nie zweimal hintereinander
+    return nameOf(pool[i]);
+  }
+  const pad = n => String(n).padStart(2, "0");
+
+  /* Ideen für ein Kalenderdatum (Monat 1–12) */
+  function ideasFor(y, m, d) {
+    const day = Math.floor(Date.UTC(y, m - 1, d) / 864e5);
+    return { key: y + "-" + pad(m) + "-" + pad(d), dish: pick(CONFIG.dishes, day, m, 11), bake: pick(CONFIG.bakes, day, m, 97) };
+  }
+
+  const api = { CONFIG, ideasFor };
+  if (typeof module === "object" && module.exports) module.exports = api;
+  else root.Kitchen = api;
+})(typeof self !== "undefined" ? self : this);
+</script>
+<script>
+const { CONFIG, ideasFor } = window.Kitchen;
+
+/* ---------- Helfer ---------- */
+const $ = id => document.getElementById(id);
+const store = {
+  get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } },
+  set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+const vibrate = p => { try { navigator.vibrate && navigator.vibrate(p); } catch(e){} };
+const isAndroid = /Android/i.test(navigator.userAgent);
+
+/* YouTube-Links auf Android direkt in der App öffnen */
+function ytHref(url){
+  if (!isAndroid) return url;
+  return "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=" + encodeURIComponent(url) + ";end";
+}
+function setLink(el, url, youtube){
+  el.href = youtube ? ytHref(url) : url;
+  if (youtube && isAndroid) el.removeAttribute("target"); else el.target = "_blank";
+}
+
+/* Vorschaubild setzen; ohne Bild bleibt der farbige Platzhalter */
+function setThumb(box, src){
+  if ((box.dataset.src || "") === (src || "")) return;
+  box.dataset.src = src || "";
+  box.classList.remove("has-img");
+  const old = box.querySelector("img");
+  if (old) old.remove();
+  if (!src) return;
+  const img = new Image();
+  img.alt = ""; img.decoding = "async"; img.referrerPolicy = "no-referrer";
+  img.onload = () => { if (box.dataset.src === src) box.classList.add("has-img"); };
+  img.onerror = () => img.remove();
+  img.src = src;
+  box.prepend(img);
+}
+
+/* ---------- Feed (vom GitHub-Updater erzeugt) ---------- */
+let FEED = null;
+async function loadFeed(){
+  try {
+    const r = await fetch("feed.json?t=" + Date.now(), { cache: "no-store" });
+    if (r.ok) FEED = await r.json();
+  } catch(e){ /* lokal geöffnet oder offline: Seite funktioniert ohne Bilder */ }
+  renderIdeas(); renderVideo();
+}
+
+/* ---------- Uhr & Datum ---------- */
+const timeFmt = new Intl.DateTimeFormat("de-DE",{hour:"2-digit",minute:"2-digit"});
+const dateFmt = new Intl.DateTimeFormat("de-DE",{weekday:"long",day:"numeric",month:"long"});
+const relFmt = new Intl.RelativeTimeFormat("de",{numeric:"auto"});
+let lastDay = null, lastMinute = null;
+
+function tickClock(){
+  const now = new Date();
+  const t = timeFmt.format(now);
+  if (t !== lastMinute){
+    lastMinute = t;
+    $("time").textContent = t;
+    renderVideo();
+  }
+  const day = now.toDateString();
+  if (day !== lastDay){
+    lastDay = day;
+    $("date").textContent = dateFmt.format(now);
+    renderIdeas();
+  }
+  setTimeout(tickClock, 1000 - (Date.now() % 1000) + 20);
+}
+
+/* ---------- Ideen des Tages ---------- */
+function renderIdeas(){
+  const now = new Date();
+  const idea = ideasFor(now.getFullYear(), now.getMonth() + 1, now.getDate());
+  const day = FEED && FEED.days && FEED.days[idea.key] || {};
+  [["dish", CONFIG.chefkochSearch], ["bake", CONFIG.backenSearch]].forEach(([kind, search]) => {
+    const name = idea[kind];
+    const info = day[kind] && day[kind].name === name ? day[kind] : null;
+    $(kind + "Name").textContent = name;
+    setLink($(kind + "Link"), (info && info.url) || search(name));
+    setThumb($(kind + "Thumb"), info && info.image);
+  });
+}
+
+/* ---------- Neuestes Video ---------- */
+function relTime(iso){
+  const t = Date.parse(iso);
+  if (!t) return "";
+  const min = Math.round((t - Date.now()) / 60000);
+  if (min > -60) return relFmt.format(Math.min(-1, min), "minute");
+  const h = Math.round(min / 60);
+  if (h > -24) return relFmt.format(h, "hour");
+  return relFmt.format(Math.round(h / 24), "day");
+}
+function renderVideo(){
+  const v = FEED && FEED.video;
+  setLink($("ytHome"), CONFIG.youtube, true);
+  if (v && v.id){
+    const rel = v.published ? relTime(v.published) : "";
+    $("videoLabel").textContent = "Neuestes Video" + (rel ? ", " + rel : "");
+    $("videoTitle").textContent = v.title;
+    setLink($("videoLink"), v.url, true);
+    setThumb($("videoThumb"), v.image);
+  } else {
+    $("videoLabel").textContent = "YouTube";
+    $("videoTitle").textContent = "Neueste Videos ansehen";
+    setLink($("videoLink"), CONFIG.youtube, true);
+    setThumb($("videoThumb"), null);
+  }
+}
+
+/* ---------- Timer ---------- */
+const P = [0, ...CONFIG.steps];          // Index 0 = linker Rand (0 min)
+const LAST = P.length - 1;
+const timerEl = $("timer"), slider = $("slider"), fill = $("fill");
+const btnMain = $("btnMain"), btnCancel = $("btnCancel");
+let state = { status:"idle", idx: Math.max(1, P.indexOf(CONFIG.defaultMinutes)), totalMs:0, endAt:0, remainingMs:0 };
+let raf = 0, wakeLock = null, audioCtx = null, alarmLoop = 0, alarmCap = 0, dragging = false;
+
+function posFor(min){
+  if (min <= 0) return 0;
+  if (min >= P[LAST]) return 1;
+  for (let i = 0; i < LAST; i++){
+    if (min <= P[i+1]) return (i + (min - P[i]) / (P[i+1] - P[i])) / LAST;
+  }
+  return 1;
+}
+const setFill = p => { fill.style.transform = "translateX(" + ((p - 1) * 100).toFixed(3) + "%)"; };
+function fmt(ms){
+  const s = Math.max(0, Math.ceil(ms / 1000));
+  return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+}
+
+function render(){
+  timerEl.dataset.status = state.status;
+  const minutes = P[state.idx];
+  slider.setAttribute("aria-valuenow", minutes);
+  slider.setAttribute("aria-valuetext", minutes + (minutes === 1 ? " Minute" : " Minuten"));
+  btnCancel.disabled = state.status === "idle";
+  btnMain.className = "round " + (state.status === "running" ? "r-orange" : "r-green");
+  btnMain.textContent = state.status === "running" ? "Pause" : state.status === "paused" ? "Weiter" : "Start";
+  if (state.status === "idle"){
+    setFill(posFor(minutes));
+    $("tTime").textContent = fmt(minutes * 60000);
+    $("tState").textContent = "Zum Einstellen ziehen";
+  } else if (state.status === "paused"){
+    setFill(posFor(state.remainingMs / 60000));
+    $("tTime").textContent = fmt(state.remainingMs);
+    $("tState").textContent = "Pausiert";
+  } else if (state.status === "done"){
+    setFill(0);
+    $("tTime").textContent = "0:00";
+    $("tState").textContent = "Abgelaufen";
+  }
+}
+
+function frame(){
+  if (state.status !== "running") return;
+  const rem = state.endAt - Date.now();
+  if (rem <= 0){ finish(); return; }
+  setFill(posFor(rem / 60000));
+  const txt = fmt(rem);
+  if ($("tTime").textContent !== txt) $("tTime").textContent = txt;
+  raf = requestAnimationFrame(frame);
+}
+function loop(){
+  cancelAnimationFrame(raf);
+  $("tState").textContent = "Fertig um " + timeFmt.format(new Date(state.endAt));
+  raf = requestAnimationFrame(frame);
+}
+function save(){ store.set("kd.timer", state); }
+
+function setIdx(i){
+  i = Math.min(LAST, Math.max(1, i));
+  if (i === state.idx) return;
+  state.idx = i; vibrate(8); render(); save();
+}
+
+function start(){
+  unlockAudio();
+  state.totalMs = P[state.idx] * 60000;
+  state.endAt = Date.now() + state.totalMs;
+  state.status = "running";
+  render(); save(); loop(); keepAwake(true);
+}
+function pause(){
+  state.remainingMs = Math.max(0, state.endAt - Date.now());
+  state.status = "paused";
+  cancelAnimationFrame(raf); render(); save(); keepAwake(false);
+}
+function resume(){
+  unlockAudio();
+  state.endAt = Date.now() + state.remainingMs;
+  state.status = "running";
+  render(); save(); loop(); keepAwake(true);
+}
+function cancel(){
+  cancelAnimationFrame(raf);
+  state.status = "idle";
+  render(); save(); keepAwake(false);
+}
+function finish(){
+  cancelAnimationFrame(raf);
+  state.status = "done";
+  render(); save();
+  const m = Math.round(state.totalMs / 60000);
+  $("alarmText").textContent = m + (m === 1 ? " Minute ist um." : " Minuten sind um.");
+  $("alarm").hidden = false;
+  $("btnStop").focus({ preventScroll:true });
+  startAlarm();
+}
+function stopAlarm(){
+  clearInterval(alarmLoop); clearTimeout(alarmCap); vibrate(0);
+  $("alarm").hidden = true;
+  cancel();
+}
+
+btnMain.addEventListener("click", () => {
+  if (state.status === "running") pause();
+  else if (state.status === "paused") resume();
+  else start();
+});
+btnCancel.addEventListener("click", cancel);
+$("btnStop").addEventListener("click", stopAlarm);
+
+/* Slider: Ziehen und Tippen */
+function fromPointer(e){
+  const r = slider.getBoundingClientRect();
+  setIdx(Math.round(((e.clientX - r.left) / r.width) * LAST));
+}
+slider.addEventListener("pointerdown", e => {
+  if (state.status !== "idle") return;
+  dragging = true; slider.classList.add("dragging");
+  slider.setPointerCapture(e.pointerId); fromPointer(e);
+});
+slider.addEventListener("pointermove", e => { if (dragging) fromPointer(e); });
+const endDrag = () => { dragging = false; slider.classList.remove("dragging"); };
+slider.addEventListener("pointerup", endDrag);
+slider.addEventListener("pointercancel", endDrag);
+slider.addEventListener("keydown", e => {
+  if (state.status !== "idle") return;
+  if (e.key === "ArrowRight" || e.key === "ArrowUp"){ setIdx(state.idx + 1); e.preventDefault(); }
+  if (e.key === "ArrowLeft" || e.key === "ArrowDown"){ setIdx(state.idx - 1); e.preventDefault(); }
+});
+
+/* Skala */
+(function(){
+  const box = $("ticks");
+  CONFIG.ticks.forEach((m, k) => {
+    const t = document.createElement("span");
+    t.className = "tick" + (k === CONFIG.ticks.length - 1 ? " last" : "");
+    t.style.left = (posFor(m) * 100) + "%";
+    t.textContent = m;
+    box.appendChild(t);
+  });
+})();
+
+/* Ton */
+function unlockAudio(){
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+  } catch(e){}
+}
+function chime(){
+  if (!audioCtx) return;
+  const t0 = audioCtx.currentTime;
+  [[880,0],[1175,.16],[1568,.32]].forEach(([f,d]) => {
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.type = "sine"; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t0 + d);
+    g.gain.exponentialRampToValueAtTime(0.45, t0 + d + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + d + 0.32);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(t0 + d); o.stop(t0 + d + 0.34);
+  });
+}
+function startAlarm(){
+  unlockAudio(); chime(); vibrate([400,200,400]);
+  clearInterval(alarmLoop);
+  alarmLoop = setInterval(() => { chime(); vibrate([400,200,400]); }, 1400);
+  alarmCap = setTimeout(() => clearInterval(alarmLoop), 3 * 60 * 1000);   // nach 3 Minuten verstummen
+}
+
+/* Bildschirm wach halten, solange der Timer läuft */
+async function keepAwake(on){
+  try {
+    if (on && "wakeLock" in navigator && !wakeLock) wakeLock = await navigator.wakeLock.request("screen");
+    if (!on && wakeLock){ await wakeLock.release(); wakeLock = null; }
+  } catch(e){ wakeLock = null; }
+}
+
+/* Weiterlaufen nach Seitenwechsel oder Neuladen */
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible") return;
+  loadFeed();
+  if (state.status === "running"){ wakeLock = null; keepAwake(true); loop(); }
+});
+setInterval(() => { if (state.status === "running" && Date.now() >= state.endAt) finish(); }, 1000);
+
+(function restore(){
+  const s = store.get("kd.timer");
+  if (s && s.idx >= 1 && s.idx <= LAST) state = Object.assign(state, s);
+  if (state.status === "running" && Date.now() >= state.endAt){
+    const late = Date.now() - state.endAt;
+    if (late < 30 * 60 * 1000) { render(); finish(); return; }
+    state.status = "idle";
+  }
+  if (state.status === "done") state.status = "idle";
+  render();
+  if (state.status === "running") loop();
+})();
+
+tickClock();
+loadFeed();
+setInterval(loadFeed, CONFIG.feedRefreshMinutes * 60 * 1000);
+</script>
+</body>
+</html>

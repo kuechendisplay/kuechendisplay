@@ -20,6 +20,7 @@
   --orange:#FF9500; --orange-ink:#C93400; --green:#34C759; --green-ink:#248A3D; --red:#FF3B30; --pink:#FF2D55;
   --tint-green:rgba(52,199,89,.16); --tint-orange:rgba(255,149,0,.16); --tint-gray:rgba(120,120,128,.16);
   --scrim:rgba(0,0,0,.3);
+  --spring:cubic-bezier(.32,.72,0,1);
   color-scheme:light;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -60,8 +61,9 @@ body{
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
 :focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* ---------- Layout ---------- */
+/* ---------- Layout Startseite ---------- */
 .board{
   height:100%;
   display:grid;
@@ -70,6 +72,7 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
   gap:16px;
   padding:20px max(24px,env(safe-area-inset-right,0px)) 24px max(24px,env(safe-area-inset-left,0px));
 }
+body:not([data-view="home"]) .board{display:none}
 
 /* ---------- Uhr ---------- */
 .clock{grid-column:1;grid-row:1;display:flex;flex-direction:column;justify-content:center;padding:0 8px 0 10px;min-width:0}
@@ -88,8 +91,6 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 .glyph svg{width:23px;height:23px;color:#fff;stroke:#fff}
 .row-name{flex:1;min-width:0;font-size:18px;font-weight:600;letter-spacing:-.012em}
 .chev{flex:none;width:17px;height:17px;fill:none;stroke:var(--label-3);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
 .idea{
   position:relative;flex:1;min-height:0;
   display:flex;align-items:center;gap:18px;
@@ -114,7 +115,6 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   background:color-mix(in srgb, var(--accent) 15%, var(--card));
 }
 .thumb.wide{aspect-ratio:16/9}
-/* Vorschaubild füllt die Höhe der Kachel, höchstens 46 % der Breite */
 @supports (height:1cqh){ .thumb{height:100cqh;max-width:46cqw} }
 .thumb::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px var(--hairline);pointer-events:none}
 .thumb .ph{width:34px;height:34px;color:var(--accent);stroke:var(--accent);transition:opacity .3s}
@@ -130,11 +130,12 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .play svg{width:16px;height:16px;color:#fff;margin-left:2px}
 .thumb.has-img .play{opacity:1}
 
-/* ---------- Timer ---------- */
+/* ---------- Timer (Startseite) ---------- */
 .timer{
   grid-column:1 / -1;grid-row:2;
   display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:28px;
   padding:20px 26px 20px 28px;
+  view-transition-name:timer;
 }
 .readout{width:190px;display:flex;flex-direction:column;gap:4px}
 .readout-time{font-size:58px;font-weight:600;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
@@ -148,10 +149,10 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 }
 .slider.dragging .fill{transition:background-color .3s,opacity .3s}
 .slider.dragging{cursor:grabbing}
-.timer[data-status="running"] .fill{background:var(--orange);transition:background-color .3s,opacity .3s}
-.timer[data-status="paused"] .fill{background:var(--orange);opacity:.45}
-.timer[data-status="done"] .fill{background:var(--red)}
-.timer:not([data-status="idle"]) .slider{cursor:default}
+[data-status="running"] .fill{background:var(--orange);transition:background-color .3s,opacity .3s}
+[data-status="paused"] .fill{background:var(--orange);opacity:.45}
+[data-status="done"] .fill{background:var(--red)}
+.timer:not([data-status="idle"]) .slider,.island:not([data-status="idle"]) .slider{cursor:default}
 .ticks{position:relative;height:18px;font-size:13px;font-weight:500;color:var(--label-2);font-variant-numeric:tabular-nums}
 .tick{position:absolute;top:0;transform:translateX(-50%)}
 .tick.last{transform:translateX(-100%)}
@@ -167,14 +168,163 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .r-green{background:var(--tint-green);color:var(--green-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-green)}
 .r-orange{background:var(--tint-orange);color:var(--orange-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-orange)}
 
-/* ---------- Alarm ---------- */
-.alarm{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:24px;background:var(--scrim);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
-.alarm[hidden]{display:none}
+/* ---------- Unterseiten ---------- */
+.sub{display:none;position:fixed;inset:0;background:var(--bg)}
+body[data-view="video"] #videoView{display:grid}
+body[data-view="web"] #webView{display:block}
+#videoView{
+  grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:minmax(0,1fr);gap:28px;
+  padding:calc(84px + env(safe-area-inset-top,0px)) max(28px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(28px,env(safe-area-inset-left,0px));
+}
+.vv-main{min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px}
+.player{
+  position:relative;flex:none;width:min(100%, calc((100dvh - 250px) * 16 / 9));aspect-ratio:16/9;
+  border-radius:20px;overflow:hidden;background:#000;
+  box-shadow:0 0 0 1px var(--hairline);
+}
+.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vv-title{margin:12px 0 0;font-size:22px;font-weight:650;letter-spacing:-.018em;line-height:1.22;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.vv-meta{margin:0;font-size:15px;color:var(--label-2)}
+.vv-list{min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin-top:-6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.vv-list::-webkit-scrollbar{display:none}
+.vv-head{font-size:15px;font-weight:600;color:var(--label-2);padding:6px 10px 8px}
+.vv-item{display:grid;grid-template-columns:132px minmax(0,1fr);gap:12px;align-items:center;padding:8px;border-radius:16px;text-align:left;transition:background-color .15s}
+.vv-item[aria-current="true"]{background:var(--card)}
+.vv-item:active{background:var(--card-press)}
+.vv-item img{width:132px;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:var(--track);display:block}
+.vv-item b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:15px;font-weight:600;line-height:1.25;letter-spacing:-.006em}
+.vv-item small{display:block;margin-top:3px;font-size:13px;color:var(--label-2)}
+#webView iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+
+/* ---------- Rezeptansicht ---------- */
+body[data-view="recipe"] #recipeView{display:grid}
+#recipeView{
+  grid-template-columns:minmax(300px,37%) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:28px;
+  padding:calc(84px + env(safe-area-inset-top,0px)) max(28px,env(safe-area-inset-right,0px)) 0 max(28px,env(safe-area-inset-left,0px));
+}
+.rv-side,.rv-steps{min-height:0;overflow-y:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+.rv-side::-webkit-scrollbar,.rv-steps::-webkit-scrollbar{display:none}
+.rv-img{position:relative;aspect-ratio:4/3;border-radius:20px;overflow:hidden;background:var(--track);background:color-mix(in srgb, var(--accent) 15%, var(--card))}
+.rv-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rv-title{margin:18px 0 10px;font-size:28px;font-weight:700;letter-spacing:-.024em;line-height:1.15}
+.rv-meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 12px;border-radius:999px;background:var(--card);font-size:14px;font-weight:600;color:var(--label-2)}
+.rv-card{margin-top:18px;background:var(--card);border-radius:20px;overflow:hidden}
+.rv-head{display:flex;justify-content:space-between;align-items:baseline;padding:14px 18px 8px;font-size:15px;font-weight:600;color:var(--label-2)}
+.rv-ingr{list-style:none;margin:0;padding:0 0 6px}
+.rv-ingr li{position:relative;display:grid;grid-template-columns:minmax(64px,auto) minmax(0,1fr);gap:14px;padding:11px 18px;font-size:17px;line-height:1.35}
+.rv-ingr li + li::before{content:"";position:absolute;top:0;left:18px;right:0;height:1px;background:var(--sep)}
+.rv-ingr b{font-weight:600;white-space:nowrap}
+.rv-orig{margin:16px 0 0;padding:10px 4px;font-size:15px;font-weight:500;color:var(--label-2)}
+.rv-steps{list-style:none;margin:0;padding-left:0;display:flex;flex-direction:column;gap:12px;counter-reset:step}
+.rv-section{margin:14px 4px 0;font-size:15px;font-weight:600;color:var(--label-2)}
+.rv-section:first-child{margin-top:0}
+.rv-step{
+  display:grid;grid-template-columns:38px minmax(0,1fr);gap:16px;align-items:start;
+  padding:20px 24px 20px 20px;border-radius:20px;background:var(--card);
+  font-size:20px;line-height:1.5;letter-spacing:-.004em;transition:opacity .25s,background-color .15s;
+}
+.rv-step:active{background:var(--card-press)}
+.rv-num{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;margin-top:-2px;
+  font-size:17px;font-weight:700;color:var(--accent);
+  background:var(--track);background:color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.rv-num svg{width:20px;height:20px;stroke:currentColor;display:none}
+.rv-step.done{opacity:.42}
+.rv-step.done .rv-num span{display:none}
+.rv-step.done .rv-num svg{display:block}
+.tchip{
+  display:inline-flex;align-items:center;gap:5px;margin:0 1px;padding:1px 11px 1px 8px;border-radius:999px;
+  background:var(--tint-orange);color:var(--orange-ink);font-weight:600;font-size:.92em;line-height:1.45;vertical-align:baseline;
+  transition:transform .12s;
+}
+.tchip:active{transform:scale(.94)}
+.tchip svg{width:.95em;height:.95em;stroke:currentColor;flex:none}
+.rv-state{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:16px;padding:24px;background:var(--bg);text-align:center}
+.rv-state[hidden]{display:none}
+.rv-state p{margin:0;font-size:17px;color:var(--label-2);max-width:420px;line-height:1.4}
+.rv-state .sheet-actions{width:min(420px,100%)}
+.spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--track);border-top-color:var(--label-2);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- Home-Button ---------- */
+.home-btn{
+  display:none;position:fixed;z-index:15;
+  top:calc(16px + env(safe-area-inset-top,0px));left:calc(18px + env(safe-area-inset-left,0px));
+  width:52px;height:52px;border-radius:50%;place-items:center;color:var(--label);
+  background:var(--card);
+  background:color-mix(in srgb, var(--card) 76%, transparent);
+  -webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6);
+  box-shadow:0 0 0 1px var(--hairline),0 6px 22px rgba(0,0,0,.16);
+  transition:transform .15s var(--spring);
+}
+body:not([data-view="home"]) .home-btn{display:grid}
+.home-btn:active{transform:scale(.9)}
+.home-btn svg{width:24px;height:24px;stroke:currentColor}
+
+/* ---------- Timer-Insel (Unterseiten) ---------- */
+.island{
+  --label:#FFFFFF; --label-2:rgba(235,235,245,.6); --label-3:rgba(235,235,245,.3);
+  --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --card:#000000;
+  --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A;
+  --tint-green:rgba(48,209,88,.22); --tint-orange:rgba(255,159,10,.22); --tint-gray:rgba(120,120,128,.34);
+  display:none;position:fixed;z-index:16;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));
+  width:150px;height:50px;border-radius:25px;transform:translateX(-50%);
+  background:#000;color:#fff;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.07),0 14px 34px rgba(0,0,0,.32);
+  transition:width .55s var(--spring),height .55s var(--spring),border-radius .55s var(--spring),box-shadow .3s;
+  view-transition-name:timer;
+}
+body:not([data-view="home"]) .island{display:block}
+.island.open{width:min(640px, calc(100vw - 32px));height:204px;border-radius:38px}
+.island-pill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;transition:opacity .2s}
+.island.open .island-pill{opacity:0;pointer-events:none}
+.ring{flex:none;width:28px;height:28px}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.2);stroke-width:2.6}
+.ring-fg{fill:none;stroke:var(--orange);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:69.115;stroke-dashoffset:69.115;transition:stroke .3s}
+.hands{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
+.island-time{font-size:17px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums;min-width:3.4ch;transition:color .3s}
+.island[data-status="running"] .hands,.island[data-status="paused"] .hands{stroke:var(--orange)}
+.island[data-status="running"] .island-time{color:var(--orange)}
+.island[data-status="paused"] .island-time{color:rgba(255,159,10,.6)}
+.island[data-status="done"]{animation:pulse 1.2s ease-in-out infinite}
+.island[data-status="done"] .hands,.island[data-status="done"] .ring-bg{stroke:var(--red)}
+.island[data-status="done"] .island-time{color:var(--red)}
+@keyframes pulse{50%{box-shadow:0 0 0 1px rgba(255,69,58,.6),0 0 0 8px rgba(255,69,58,.18),0 14px 34px rgba(0,0,0,.32)}}
+.island-panel{
+  position:absolute;top:0;left:50%;width:min(640px, calc(100vw - 32px));height:204px;transform:translateX(-50%);
+  padding:20px 26px 18px 30px;display:flex;flex-direction:column;justify-content:space-between;
+  opacity:0;pointer-events:none;transition:opacity .15s;
+}
+.island.open .island-panel{opacity:1;pointer-events:auto;transition:opacity .3s .14s}
+.ip-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ip-readout{display:flex;flex-direction:column;gap:2px}
+.ip-time{font-size:44px;font-weight:600;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.ip-state{font-size:14px;color:var(--label-2);white-space:nowrap}
+.island .actions{gap:16px;padding:5px}
+.island .round{width:64px;height:64px;font-size:12.5px}
+.island .slider{height:46px}
+.island .slider-wrap{gap:6px;padding-top:0}
+.island .ticks{font-size:12px;height:15px}
+.island-scrim{display:none;position:fixed;inset:0;z-index:15}
+.island-scrim.on{display:block}
+
+::view-transition-group(timer){animation-duration:.55s;animation-timing-function:var(--spring)}
+::view-transition-old(timer),::view-transition-new(timer){height:100%;width:100%}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.28s}
+
+/* ---------- Dialoge ---------- */
+.overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:24px;background:var(--scrim);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.overlay[hidden]{display:none}
 .sheet{width:min(440px,100%);background:var(--card);border-radius:28px;padding:32px 28px 24px;text-align:center;animation:pop .35s cubic-bezier(.2,.9,.25,1.1)}
-.sheet h2{margin:0;font-size:30px;font-weight:700;letter-spacing:-.025em}
-.sheet p{margin:8px 0 26px;font-size:17px;color:var(--label-2)}
-.stop{width:100%;height:60px;border-radius:16px;background:var(--orange);color:#fff;font-size:20px;font-weight:600}
-.stop:active{opacity:.85}
+.sheet h2{margin:0;font-size:28px;font-weight:700;letter-spacing:-.025em}
+.sheet p{margin:10px 0 26px;font-size:17px;line-height:1.4;color:var(--label-2)}
+.stop,.btn-1,.btn-2{width:100%;height:58px;border-radius:16px;font-size:19px;font-weight:600}
+.stop,.btn-1{background:var(--orange);color:#fff}
+.btn-2{background:var(--tint-gray);color:var(--label)}
+.sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stop:active,.btn-1:active,.btn-2:active{opacity:.85}
 @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
@@ -187,17 +337,26 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .time{font-size:min(26vw,20vh)}
   .idea{min-height:150px;height:150px}
   .timer{grid-template-columns:minmax(0,1fr) auto;gap:20px}
-  .slider-wrap{grid-column:1 / -1;grid-row:2}
+  .timer > .slider-wrap{grid-column:1 / -1;grid-row:2}
   .readout{width:auto}
+  #videoView{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:16px}
+  #recipeView{display:none;grid-template-columns:minmax(0,1fr);overflow-y:auto}
+  body[data-view="recipe"] #recipeView{display:block}
+  .rv-side,.rv-steps{overflow:visible;padding-bottom:20px}
+  .rv-steps{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  .player{width:100%}
 }
 @media (max-width: 520px){ .idea{padding-left:20px;height:120px;min-height:120px} .idea::before{left:20px} }
 </style>
 </head>
-<body>
+<body data-view="home">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-fork" viewBox="0 0 24 24"><path d="M6 3v5a2 2 0 0 0 4 0V3M8 10v11M17.5 21V3c-2.2 1.3-3.2 4-3.2 8h3.2"/></symbol>
   <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 20h16M5.5 20v-7.5h13V20M5.5 15.5c1.6 1 3.1 1 4.6 0s3.1-1 4.6 0 3.1 1 3.8 0M12 12.5V9"/><path stroke="none" fill="currentColor" d="M12 4.2c.9 1 1.4 1.8 1.4 2.5a1.4 1.4 0 0 1-2.8 0c0-.7.5-1.5 1.4-2.5z"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path stroke="none" fill="currentColor" d="M8 5.6v12.8L18.4 12z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11.2 12 4l8.5 7.2M6 9.6V20h4.5v-5.5h3V20H18V9.6"/></symbol>
 </svg>
 
 <main class="board">
@@ -208,12 +367,12 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
   <section class="side" aria-label="Rezepte und Videos">
     <article class="card source" style="--accent:var(--green)">
-      <a class="row" id="ckHome" href="https://www.chefkoch.de/" target="_blank" rel="noopener">
+      <a class="row" id="ckHome" data-open="site" href="https://www.chefkoch.de/">
         <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-fork"/></svg></span>
         <span class="row-name">Chefkoch</span>
         <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
       </a>
-      <a class="idea" id="dishLink" href="#" target="_blank" rel="noopener">
+      <a class="idea" id="dishLink" data-open="site" href="#">
         <span class="idea-text">
           <span class="idea-label">Idee für heute</span>
           <span class="idea-title" id="dishName"></span>
@@ -223,12 +382,12 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     </article>
 
     <article class="card source" style="--accent:var(--pink)">
-      <a class="row" id="ebHome" href="https://www.einfachbacken.de/" target="_blank" rel="noopener">
+      <a class="row" id="ebHome" data-open="site" href="https://www.einfachbacken.de/">
         <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-cake"/></svg></span>
         <span class="row-name">Einfach Backen</span>
         <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
       </a>
-      <a class="idea" id="bakeLink" href="#" target="_blank" rel="noopener">
+      <a class="idea" id="bakeLink" data-open="site" href="#">
         <span class="idea-text">
           <span class="idea-label">Idee für heute</span>
           <span class="idea-title" id="bakeName"></span>
@@ -238,12 +397,12 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     </article>
 
     <article class="card source video" style="--accent:var(--red)">
-      <a class="row" id="ytHome" href="https://www.youtube.com/@dailyceddo/videos" target="_blank" rel="noopener">
+      <a class="row" id="ytHome" data-open="video" href="https://www.youtube.com/@dailyceddo/videos">
         <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-play"/></svg></span>
         <span class="row-name">Daily Ceddo</span>
         <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
       </a>
-      <a class="idea" id="videoLink" href="#" target="_blank" rel="noopener">
+      <a class="idea" id="videoLink" data-open="video" href="#">
         <span class="idea-text">
           <span class="idea-label" id="videoLabel">Neuestes Video</span>
           <span class="idea-title" id="videoTitle">Neueste Videos ansehen</span>
@@ -274,11 +433,83 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   </section>
 </main>
 
-<div class="alarm" id="alarm" hidden>
+<!-- Unterseite: Video -->
+<section class="sub" id="videoView" aria-label="Video">
+  <div class="vv-main">
+    <div class="player" id="player"></div>
+    <h1 class="vv-title" id="vvTitle"></h1>
+    <p class="vv-meta" id="vvMeta"></p>
+  </div>
+  <aside class="vv-list" id="vvList" aria-label="Weitere Videos"></aside>
+</section>
+
+<!-- Unterseite: eingebettete Webseite (nur mit embedSites) -->
+<section class="sub" id="webView" aria-label="Rezept"></section>
+
+<!-- Unterseite: eigene Rezeptansicht (mit recipeProxy) -->
+<section class="sub" id="recipeView" aria-label="Rezept">
+  <div class="rv-side" id="rvSide">
+    <div class="rv-img" id="rvImg"></div>
+    <h1 class="rv-title" id="rvTitle"></h1>
+    <div class="rv-meta" id="rvMeta"></div>
+    <div class="rv-card">
+      <div class="rv-head"><span>Zutaten</span><span id="rvYield"></span></div>
+      <ul class="rv-ingr" id="rvIngr"></ul>
+    </div>
+    <button class="rv-orig" id="rvOrig" type="button"></button>
+  </div>
+  <ol class="rv-steps" id="rvSteps"></ol>
+  <div class="rv-state" id="rvState" hidden></div>
+</section>
+
+<a class="home-btn" id="homeBtn" href="./" aria-label="Zur Startseite"><svg class="i" viewBox="0 0 24 24"><use href="#i-home"/></svg></a>
+
+<!-- Timer-Insel -->
+<div class="island-scrim" id="islandScrim"></div>
+<div class="island" id="island" data-status="idle" aria-label="Timer">
+  <button class="island-pill" id="islandPill" type="button" aria-label="Timer öffnen">
+    <svg class="ring" viewBox="0 0 28 28" aria-hidden="true">
+      <g transform="rotate(-90 14 14)"><circle class="ring-bg" cx="14" cy="14" r="11"/><circle class="ring-fg" id="ringFg" cx="14" cy="14" r="11"/></g>
+      <path class="hands" d="M14 8.6V14l3.4 2.2"/>
+    </svg>
+    <span class="island-time" id="iTime">Timer</span>
+  </button>
+  <div class="island-panel">
+    <div class="ip-top">
+      <div class="ip-readout">
+        <span class="ip-time" id="iTimeBig">10:00</span>
+        <span class="ip-state" id="iState">Zum Einstellen ziehen</span>
+      </div>
+      <div class="actions">
+        <button class="round r-gray" id="iCancel" type="button" disabled>Abbrechen</button>
+        <button class="round r-green" id="iMain" type="button">Start</button>
+      </div>
+    </div>
+    <div class="slider-wrap">
+      <div class="slider" id="iSlider" role="slider" tabindex="0" aria-label="Timerdauer in Minuten" aria-valuemin="1" aria-valuemax="45" aria-valuenow="10" aria-valuetext="10 Minuten">
+        <div class="fill" id="iFill"></div>
+      </div>
+      <div class="ticks" id="iTicks" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Dialoge -->
+<div class="overlay" id="alarm" hidden>
   <div class="sheet" role="alertdialog" aria-labelledby="alarmTitle" aria-describedby="alarmText">
     <h2 id="alarmTitle">Timer abgelaufen</h2>
     <p id="alarmText"></p>
     <button class="stop" id="btnStop" type="button">Stopp</button>
+  </div>
+</div>
+<div class="overlay" id="confirm" hidden>
+  <div class="sheet" role="alertdialog" aria-labelledby="cfTitle" aria-describedby="cfText">
+    <h2 id="cfTitle">Der Timer läuft</h2>
+    <p id="cfText">Die Seite öffnet sich im ganzen Fenster. Der Timer läuft weiter, klingeln kann er aber erst, wenn du zurück bist.</p>
+    <div class="sheet-actions">
+      <button class="btn-2" id="cfCancel" type="button">Hierbleiben</button>
+      <button class="btn-1" id="cfOk" type="button">Öffnen</button>
+    </div>
   </div>
 </div>
 
@@ -300,6 +531,13 @@ svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     // Einfach Backen hat keine stabile Such-URL: DuckDuckGo mit „\“ springt direkt zum ersten Treffer.
     backenSearch: q => "https://duckduckgo.com/?q=" + encodeURIComponent("\\site:einfachbacken.de " + q),
     feedRefreshMinutes: 20,
+    // true, wenn Fully PLUS „Remove X-Frame, CSP and CORS protection“ für die Rezeptseiten aktiv ist:
+    // dann öffnen sich Rezepte innerhalb des Displays (mit Home-Button und Timer-Insel).
+    // false: Rezepte öffnen im ganzen Fenster, zurück per Zurück-Geste.
+    embedSites: false,
+    // Adresse des Cloudflare Workers (worker/worker.js), z. B. "https://kuechen-rezepte.NAME.workers.dev".
+    // Gesetzt: Rezepte von Chefkoch und Einfach Backen öffnen in der eigenen Rezeptansicht.
+    recipeProxy: "https://kuechen-rezepte.spam14.workers.dev/",
     steps: [1,2,3,4,5,6,7,8,9,10,12,15,20,25,30,35,40,45],
     ticks: [1,5,10,15,20,30,45],
     defaultMinutes: 10,
@@ -368,17 +606,7 @@ const store = {
   set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 };
 const vibrate = p => { try { navigator.vibrate && navigator.vibrate(p); } catch(e){} };
-const isAndroid = /Android/i.test(navigator.userAgent);
-
-/* YouTube-Links auf Android direkt in der App öffnen */
-function ytHref(url){
-  if (!isAndroid) return url;
-  return "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=" + encodeURIComponent(url) + ";end";
-}
-function setLink(el, url, youtube){
-  el.href = youtube ? ytHref(url) : url;
-  if (youtube && isAndroid) el.removeAttribute("target"); else el.target = "_blank";
-}
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* Vorschaubild setzen; ohne Bild bleibt der farbige Platzhalter */
 function setThumb(box, src){
@@ -398,12 +626,14 @@ function setThumb(box, src){
 
 /* ---------- Feed (vom GitHub-Updater erzeugt) ---------- */
 let FEED = null;
+const videoList = () => (FEED && FEED.videos && FEED.videos.length) ? FEED.videos : (FEED && FEED.video ? [FEED.video] : []);
 async function loadFeed(){
   try {
     const r = await fetch("feed.json?t=" + Date.now(), { cache: "no-store" });
     if (r.ok) FEED = await r.json();
   } catch(e){ /* lokal geöffnet oder offline: Seite funktioniert ohne Bilder */ }
   renderIdeas(); renderVideo();
+  if (view === "video" && currentVideo) openVideo(currentVideo);
 }
 
 /* ---------- Uhr & Datum ---------- */
@@ -415,17 +645,9 @@ let lastDay = null, lastMinute = null;
 function tickClock(){
   const now = new Date();
   const t = timeFmt.format(now);
-  if (t !== lastMinute){
-    lastMinute = t;
-    $("time").textContent = t;
-    renderVideo();
-  }
+  if (t !== lastMinute){ lastMinute = t; $("time").textContent = t; renderVideo(); }
   const day = now.toDateString();
-  if (day !== lastDay){
-    lastDay = day;
-    $("date").textContent = dateFmt.format(now);
-    renderIdeas();
-  }
+  if (day !== lastDay){ lastDay = day; $("date").textContent = dateFmt.format(now); renderIdeas(); }
   setTimeout(tickClock, 1000 - (Date.now() % 1000) + 20);
 }
 
@@ -438,12 +660,12 @@ function renderIdeas(){
     const name = idea[kind];
     const info = day[kind] && day[kind].name === name ? day[kind] : null;
     $(kind + "Name").textContent = name;
-    setLink($(kind + "Link"), (info && info.url) || search(name));
+    $(kind + "Link").href = (info && info.url) || search(name);
     setThumb($(kind + "Thumb"), info && info.image);
   });
 }
 
-/* ---------- Neuestes Video ---------- */
+/* ---------- Neuestes Video (Startseite) ---------- */
 function relTime(iso){
   const t = Date.parse(iso);
   if (!t) return "";
@@ -454,29 +676,272 @@ function relTime(iso){
   return relFmt.format(Math.round(h / 24), "day");
 }
 function renderVideo(){
-  const v = FEED && FEED.video;
-  setLink($("ytHome"), CONFIG.youtube, true);
+  const v = videoList()[0];
+  $("ytHome").href = CONFIG.youtube;
   if (v && v.id){
     const rel = v.published ? relTime(v.published) : "";
     $("videoLabel").textContent = "Neuestes Video" + (rel ? ", " + rel : "");
     $("videoTitle").textContent = v.title;
-    setLink($("videoLink"), v.url, true);
+    $("videoLink").href = v.url;
+    $("videoLink").dataset.video = v.id;
+    $("ytHome").dataset.video = v.id;
     setThumb($("videoThumb"), v.image);
   } else {
     $("videoLabel").textContent = "YouTube";
     $("videoTitle").textContent = "Neueste Videos ansehen";
-    setLink($("videoLink"), CONFIG.youtube, true);
+    $("videoLink").href = CONFIG.youtube;
+    delete $("videoLink").dataset.video;
+    delete $("ytHome").dataset.video;
     setThumb($("videoThumb"), null);
   }
+}
+
+/* ---------- Navigation: Startseite und Unterseiten ---------- */
+let view = "home", currentVideo = null;
+
+function parseHash(){
+  const h = location.hash.slice(1);
+  if (h.startsWith("video=")) return { view: "video", id: decodeURIComponent(h.slice(6)) };
+  if (h.startsWith("rezept=") && CONFIG.recipeProxy) return { view: "recipe", url: decodeURIComponent(h.slice(7)) };
+  if (h.startsWith("web=") && CONFIG.embedSites) return { view: "web", url: decodeURIComponent(h.slice(4)) };
+  return { view: "home" };
+}
+const hashOf = r => r.view === "video" ? "#video=" + encodeURIComponent(r.id)
+                  : r.view === "recipe" ? "#rezept=" + encodeURIComponent(r.url)
+                  : r.view === "web" ? "#web=" + encodeURIComponent(r.url) : "";
+
+function go(r, replace){
+  history[replace ? "replaceState" : "pushState"]({ kd: true }, "", hashOf(r) || location.pathname + location.search);
+  show(r);
+}
+function home(){
+  if (history.state && history.state.kd) history.back();
+  else { history.replaceState(null, "", location.pathname + location.search); show({ view: "home" }); }
+}
+function show(r){
+  const apply = () => applyRoute(r);
+  if (r.view !== view && document.startViewTransition && !reduceMotion) document.startViewTransition(apply);
+  else apply();
+}
+function applyRoute(r){
+  view = r.view;
+  document.body.dataset.view = view;
+  closeIsland();
+  if (view === "video") openVideo(r.id);
+  else if (currentVideo){ mountFrame($("player"), null); currentVideo = null; }
+  if (view === "recipe") openRecipe(r.url); else currentRecipe = null;
+  const web = $("webView");
+  if (view === "web"){ if (web.dataset.url !== r.url){ mountFrame(web, r.url, "Rezept"); web.dataset.url = r.url; } }
+  else if (web.dataset.url){ mountFrame(web, null); web.dataset.url = ""; }
+}
+/* iframes immer neu erzeugen statt src zu ändern: sonst landen ihre Seitenwechsel
+   im Verlauf und die Zurück-Geste springt im Video statt zur Startseite */
+function mountFrame(box, src, title){
+  if (!src){ box.replaceChildren(); return; }
+  const f = document.createElement("iframe");
+  f.title = title || "";
+  f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+  f.allowFullscreen = true;
+  f.referrerPolicy = "strict-origin-when-cross-origin";
+  f.src = src;
+  box.replaceChildren(f);
+}
+window.addEventListener("popstate", () => show(parseHash()));
+
+/* Links abfangen: nie Pop-ups, Videos im Display, Rezepte je nach embedSites */
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[data-open]");
+  if (!a) return;
+  e.preventDefault();
+  if (a.dataset.open === "video" && a.dataset.video) go({ view: "video", id: a.dataset.video });
+  else if (a.dataset.open === "site" && CONFIG.recipeProxy && isRecipeUrl(a.href)) go({ view: "recipe", url: a.href });
+  else if (a.dataset.open === "site" && CONFIG.embedSites) go({ view: "web", url: a.href });
+  else leave(a.href);
+});
+$("homeBtn").addEventListener("click", e => { e.preventDefault(); home(); });
+
+function leave(url){
+  if (state.status !== "running") { location.assign(url); return; }
+  confirmSheet("Der Timer läuft",
+    "Die Seite öffnet sich im ganzen Fenster. Der Timer läuft weiter, klingeln kann er aber erst, wenn du zurück bist.",
+    "Öffnen", "Hierbleiben", () => location.assign(url));
+}
+function confirmSheet(title, text, okLabel, cancelLabel, onOk){
+  $("cfTitle").textContent = title; $("cfText").textContent = text;
+  $("cfOk").textContent = okLabel; $("cfCancel").textContent = cancelLabel;
+  $("confirm").hidden = false;
+  $("cfOk").onclick = () => { $("confirm").hidden = true; onOk(); };
+  $("cfCancel").onclick = () => { $("confirm").hidden = true; };
+}
+
+/* ---------- Rezeptansicht ---------- */
+const RECIPE_HOSTS = ["www.chefkoch.de", "chefkoch.de", "www.einfachbacken.de", "einfachbacken.de"];
+function isRecipeUrl(u){
+  try {
+    const x = new URL(u);
+    if (!RECIPE_HOSTS.includes(x.hostname)) return false;
+    if (x.hostname.includes("chefkoch")) return /^\/rezepte\/\d+\//.test(x.pathname);
+    return x.pathname.length > 2 && !/^\/(suche|search)/.test(x.pathname);
+  } catch(e){ return false; }
+}
+const recipeCache = new Map();
+let currentRecipe = null;
+
+async function openRecipe(url){
+  if (currentRecipe === url) return;
+  currentRecipe = url;
+  $("recipeView").style.setProperty("--accent", url.includes("einfachbacken") ? "var(--pink)" : "var(--green)");
+  recipeState("loading");
+  try {
+    let data = recipeCache.get(url);
+    if (!data){
+      const r = await fetch(CONFIG.recipeProxy + "?url=" + encodeURIComponent(url));
+      data = await r.json().catch(() => ({}));
+      if (!r.ok || !data.steps) throw new Error(data.error || "Fehler " + r.status);
+      recipeCache.set(url, data);
+    }
+    if (currentRecipe !== url) return;
+    renderRecipe(data);
+    recipeState(null);
+  } catch(e){
+    if (currentRecipe === url) recipeState("error", url);
+  }
+}
+
+function recipeState(kind, url){
+  const box = $("rvState");
+  if (!kind){ box.hidden = true; return; }
+  box.hidden = false;
+  if (kind === "loading"){
+    const sp = document.createElement("div"); sp.className = "spinner";
+    const p = document.createElement("p"); p.textContent = "Rezept wird geladen";
+    box.replaceChildren(sp, p);
+    return;
+  }
+  const p = document.createElement("p");
+  p.textContent = "Das Rezept konnte nicht geladen werden.";
+  const row = document.createElement("div"); row.className = "sheet-actions";
+  const retry = document.createElement("button"); retry.className = "btn-2"; retry.type = "button"; retry.textContent = "Nochmal";
+  retry.onclick = () => { currentRecipe = null; openRecipe(url); };
+  const orig = document.createElement("button"); orig.className = "btn-1"; orig.type = "button"; orig.textContent = "Original öffnen";
+  orig.onclick = () => leave(url);
+  row.append(retry, orig);
+  box.replaceChildren(p, row);
+}
+
+const svgUse = (id) => {
+  const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  s.setAttribute("class", "i"); s.setAttribute("viewBox", "0 0 24 24");
+  const u = document.createElementNS("http://www.w3.org/2000/svg", "use");
+  u.setAttribute("href", "#" + id); s.append(u); return s;
+};
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+
+const AMOUNT_RE = /^((?:ca\.\s*)?[\d½¼¾⅓⅔⅛][\d½¼¾⅓⅔⅛.,\/\s–-]*(?:\s*(?:g|kg|mg|ml|l|cl|dl|EL|TL|Msp\.?|Prisen?|Pck\.?|Päckchen|Packung(?:en)?|Becher|Dosen?|Stück|Stk\.?|Bund|Zehen?|Zehe\(n\)|Scheiben?|Scheibe\(n\)|Tassen?|Glas|Gläser|Tropfen|Handvoll|Spritzer|Würfel|Blatt|Blätter|Zweige?|Zweig\(e\)|Liter|Gramm)(?![a-zäöüß]))?\.?)\s+(.+)$/i;
+const TIME_RE = /(\d+(?:[.,]\d+)?)\.?(?:\s*(?:-|–|bis)\s*(\d+(?:[.,]\d+)?))?\s*(Minuten|Minute|Min\.?|Stunden|Stunde|Std\.?)(?![a-zäöüß])/gi;
+
+/* Bild aus dem Feed, falls die Rezeptdaten keins mitbringen */
+function feedImageFor(url){
+  const days = (FEED && FEED.days) || {};
+  for (const k in days) for (const kind of ["dish", "bake"]) {
+    const e = days[k][kind]; if (e && e.url === url && e.image) return e.image;
+  }
+  return null;
+}
+const prettyAmount = a => a
+  .replace(/(^|\D)0[.,]5(?!\d)/g, "$1½").replace(/(^|\D)0[.,]25(?!\d)/g, "$1¼").replace(/(^|\D)0[.,]75(?!\d)/g, "$1¾")
+  .replace(/(\d)[.,]5(?!\d)/g, "$1½");
+
+function renderRecipe(d){
+  $("rvSide").scrollTop = 0; $("rvSteps").scrollTop = 0; $("recipeView").scrollTop = 0;
+  const imgBox = $("rvImg"); imgBox.replaceChildren();
+  const image = d.image || feedImageFor(d.url);
+  if (image){ const im = new Image(); im.alt = ""; im.referrerPolicy = "no-referrer"; im.src = image; imgBox.append(im); }
+  // Chefkoch hängt den Benutzernamen an den Titel an („… von Name“)
+  $("rvTitle").textContent = d.source === "chefkoch.de" ? d.name.replace(/\s+von\s+\S+$/, "") : d.name;
+  const meta = [];
+  if (d.totalMinutes) meta.push(d.totalMinutes >= 60 ? (Math.floor(d.totalMinutes / 60) + " Std. " + (d.totalMinutes % 60 ? d.totalMinutes % 60 + " Min." : "")).trim() : d.totalMinutes + " Min.");
+  meta.push(d.source);
+  $("rvMeta").replaceChildren(...meta.map(t => el("span", "chip", t)));
+  $("rvYield").textContent = d.yield ? (/^\d+$/.test(d.yield) ? d.yield + (d.yield === "1" ? " Portion" : " Portionen") : d.yield) : "";
+  $("rvIngr").replaceChildren(...d.ingredients.map(line => {
+    const m = AMOUNT_RE.exec(line);
+    const li = el("li");
+    li.append(el("b", null, m ? prettyAmount(m[1].trim()) : ""), el("span", null, m ? m[2] : line));
+    return li;
+  }));
+  $("rvOrig").textContent = "Original auf " + d.source;
+  $("rvOrig").onclick = () => leave(d.url);
+
+  const list = [];
+  let section = null, n = 0;
+  const showSections = new Set(d.steps.map(st => st.section || "")).size > 1;
+  d.steps.forEach(st => {
+    if (showSections && st.section && st.section !== section){ section = st.section; list.push(el("li", "rv-section", section)); }
+    n++;
+    const li = el("li", "rv-step");
+    const num = el("span", "rv-num"); num.append(el("span", null, n), svgUse("i-check"));
+    const txt = el("span");
+    let last = 0;
+    for (const m of st.text.matchAll(TIME_RE)){
+      txt.append(st.text.slice(last, m.index));
+      const val = parseFloat(m[1].replace(",", "."));
+      const minutes = /^st/i.test(m[3]) ? val * 60 : val;
+      const b = el("button", "tchip"); b.type = "button";
+      b.append(svgUse("i-clock"), m[0]);
+      b.addEventListener("click", e => { e.stopPropagation(); startFor(minutes, m[0]); });
+      txt.append(b);
+      last = m.index + m[0].length;
+    }
+    txt.append(st.text.slice(last));
+    li.append(num, txt);
+    li.addEventListener("click", () => li.classList.toggle("done"));
+    list.push(li);
+  });
+  $("rvSteps").replaceChildren(...list);
+}
+
+/* ---------- Video-Unterseite ---------- */
+function openVideo(id){
+  const v = videoList().find(x => x.id === id) || { id, title: "", published: null };
+  if (currentVideo !== id){
+    currentVideo = id;
+    mountFrame($("player"), "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&playsinline=1&rel=0", "YouTube-Video");
+  }
+  $("vvTitle").textContent = v.title || "";
+  $("vvMeta").textContent = "Daily Ceddo" + (v.published ? ", " + relTime(v.published) : "");
+  renderVideoList();
+}
+function renderVideoList(){
+  const box = $("vvList");
+  const head = document.createElement("div");
+  head.className = "vv-head"; head.textContent = "Neu von Daily Ceddo";
+  const items = videoList().map(v => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "vv-item";
+    if (v.id === currentVideo) b.setAttribute("aria-current", "true");
+    const img = new Image(); img.alt = ""; img.loading = "lazy"; img.referrerPolicy = "no-referrer"; img.src = v.image;
+    const txt = document.createElement("span");
+    const t = document.createElement("b"); t.textContent = v.title;
+    const m = document.createElement("small"); m.textContent = v.published ? relTime(v.published) : "";
+    txt.append(t, m); b.append(img, txt);
+    b.addEventListener("click", () => go({ view: "video", id: v.id }, true));
+    return b;
+  });
+  box.replaceChildren(head, ...items);
 }
 
 /* ---------- Timer ---------- */
 const P = [0, ...CONFIG.steps];          // Index 0 = linker Rand (0 min)
 const LAST = P.length - 1;
-const timerEl = $("timer"), slider = $("slider"), fill = $("fill");
-const btnMain = $("btnMain"), btnCancel = $("btnCancel");
+const RING = 2 * Math.PI * 11;
+const timerEl = $("timer"), islandEl = $("island");
+const sliders = [$("slider"), $("iSlider")];
+const fills = [$("fill"), $("iFill")];
+const mains = [$("btnMain"), $("iMain")];
+const cancels = [$("btnCancel"), $("iCancel")];
 let state = { status:"idle", idx: Math.max(1, P.indexOf(CONFIG.defaultMinutes)), totalMs:0, endAt:0, remainingMs:0 };
-let raf = 0, wakeLock = null, audioCtx = null, alarmLoop = 0, alarmCap = 0, dragging = false;
+let raf = 0, wakeLock = null, audioCtx = null, alarmLoop = 0, alarmCap = 0, collapseT = 0;
 
 function posFor(min){
   if (min <= 0) return 0;
@@ -486,32 +951,44 @@ function posFor(min){
   }
   return 1;
 }
-const setFill = p => { fill.style.transform = "translateX(" + ((p - 1) * 100).toFixed(3) + "%)"; };
+function setFill(p){
+  const t = "translateX(" + ((p - 1) * 100).toFixed(3) + "%)";
+  fills.forEach(f => { f.style.transform = t; });
+}
+function setRing(frac){
+  $("ringFg").style.strokeDashoffset = (RING * (1 - Math.max(0, Math.min(1, frac)))).toFixed(2);
+}
 function fmt(ms){
   const s = Math.max(0, Math.ceil(ms / 1000));
   return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
 }
+function setTexts(big, st, pill){
+  $("tTime").textContent = big; $("iTimeBig").textContent = big;
+  if (st !== null){ $("tState").textContent = st; $("iState").textContent = st; }
+  $("iTime").textContent = pill;
+}
 
 function render(){
-  timerEl.dataset.status = state.status;
+  timerEl.dataset.status = islandEl.dataset.status = state.status;
   const minutes = P[state.idx];
-  slider.setAttribute("aria-valuenow", minutes);
-  slider.setAttribute("aria-valuetext", minutes + (minutes === 1 ? " Minute" : " Minuten"));
-  btnCancel.disabled = state.status === "idle";
-  btnMain.className = "round " + (state.status === "running" ? "r-orange" : "r-green");
-  btnMain.textContent = state.status === "running" ? "Pause" : state.status === "paused" ? "Weiter" : "Start";
+  sliders.forEach(s => {
+    s.setAttribute("aria-valuenow", minutes);
+    s.setAttribute("aria-valuetext", minutes + (minutes === 1 ? " Minute" : " Minuten"));
+  });
+  cancels.forEach(b => { b.disabled = state.status === "idle"; });
+  mains.forEach(b => {
+    b.className = "round " + (state.status === "running" ? "r-orange" : "r-green");
+    b.textContent = state.status === "running" ? "Pause" : state.status === "paused" ? "Weiter" : "Start";
+  });
   if (state.status === "idle"){
-    setFill(posFor(minutes));
-    $("tTime").textContent = fmt(minutes * 60000);
-    $("tState").textContent = "Zum Einstellen ziehen";
+    setFill(posFor(minutes)); setRing(0);
+    setTexts(fmt(minutes * 60000), "Zum Einstellen ziehen", "Timer");
   } else if (state.status === "paused"){
-    setFill(posFor(state.remainingMs / 60000));
-    $("tTime").textContent = fmt(state.remainingMs);
-    $("tState").textContent = "Pausiert";
+    setFill(posFor(state.remainingMs / 60000)); setRing(state.remainingMs / state.totalMs);
+    setTexts(fmt(state.remainingMs), "Pausiert", fmt(state.remainingMs));
   } else if (state.status === "done"){
-    setFill(0);
-    $("tTime").textContent = "0:00";
-    $("tState").textContent = "Abgelaufen";
+    setFill(0); setRing(0);
+    setTexts("0:00", "Abgelaufen", "Fertig");
   }
 }
 
@@ -520,13 +997,15 @@ function frame(){
   const rem = state.endAt - Date.now();
   if (rem <= 0){ finish(); return; }
   setFill(posFor(rem / 60000));
+  setRing(rem / state.totalMs);
   const txt = fmt(rem);
-  if ($("tTime").textContent !== txt) $("tTime").textContent = txt;
+  if ($("tTime").textContent !== txt) setTexts(txt, null, txt);
   raf = requestAnimationFrame(frame);
 }
 function loop(){
   cancelAnimationFrame(raf);
-  $("tState").textContent = "Fertig um " + timeFmt.format(new Date(state.endAt));
+  const st = "Fertig um " + timeFmt.format(new Date(state.endAt));
+  $("tState").textContent = st; $("iState").textContent = st;
   raf = requestAnimationFrame(frame);
 }
 function save(){ store.set("kd.timer", state); }
@@ -543,6 +1022,23 @@ function start(){
   state.endAt = Date.now() + state.totalMs;
   state.status = "running";
   render(); save(); loop(); keepAwake(true);
+}
+/* Timer mit beliebiger Dauer starten (aus Zeitangaben im Rezept) */
+function startFor(minutes, label){
+  const run = () => {
+    unlockAudio();
+    state.totalMs = Math.round(minutes * 60000);
+    state.endAt = Date.now() + state.totalMs;
+    const i = P.findIndex(x => x >= minutes);
+    state.idx = i < 1 ? LAST : i;
+    state.status = "running";
+    vibrate(15); render(); save(); loop(); keepAwake(true);
+  };
+  if (state.status === "running" || state.status === "paused"){
+    const rest = state.status === "running" ? state.endAt - Date.now() : state.remainingMs;
+    confirmSheet("Timer ersetzen?", "Es läuft noch ein Timer mit " + fmt(rest) + ". Stattdessen " + label + " starten?",
+      "Ersetzen", "Behalten", run);
+  } else run();
 }
 function pause(){
   state.remainingMs = Math.max(0, state.endAt - Date.now());
@@ -573,40 +1069,50 @@ function finish(){
 function stopAlarm(){
   clearInterval(alarmLoop); clearTimeout(alarmCap); vibrate(0);
   $("alarm").hidden = true;
-  cancel();
+  cancel(); closeIsland();
 }
 
-btnMain.addEventListener("click", () => {
+mains.forEach(b => b.addEventListener("click", () => {
   if (state.status === "running") pause();
   else if (state.status === "paused") resume();
-  else start();
-});
-btnCancel.addEventListener("click", cancel);
+  else { start(); if (islandEl.classList.contains("open")) { clearTimeout(collapseT); collapseT = setTimeout(closeIsland, 700); } }
+}));
+cancels.forEach(b => b.addEventListener("click", cancel));
 $("btnStop").addEventListener("click", stopAlarm);
 
-/* Slider: Ziehen und Tippen */
-function fromPointer(e){
-  const r = slider.getBoundingClientRect();
-  setIdx(Math.round(((e.clientX - r.left) / r.width) * LAST));
-}
-slider.addEventListener("pointerdown", e => {
-  if (state.status !== "idle") return;
-  dragging = true; slider.classList.add("dragging");
-  slider.setPointerCapture(e.pointerId); fromPointer(e);
-});
-slider.addEventListener("pointermove", e => { if (dragging) fromPointer(e); });
-const endDrag = () => { dragging = false; slider.classList.remove("dragging"); };
-slider.addEventListener("pointerup", endDrag);
-slider.addEventListener("pointercancel", endDrag);
-slider.addEventListener("keydown", e => {
-  if (state.status !== "idle") return;
-  if (e.key === "ArrowRight" || e.key === "ArrowUp"){ setIdx(state.idx + 1); e.preventDefault(); }
-  if (e.key === "ArrowLeft" || e.key === "ArrowDown"){ setIdx(state.idx - 1); e.preventDefault(); }
-});
+/* Timer-Insel auf Unterseiten: antippen zum Aufklappen, daneben tippen zum Einklappen */
+function openIsland(){ clearTimeout(collapseT); islandEl.classList.add("open"); $("islandScrim").classList.add("on"); }
+function closeIsland(){ clearTimeout(collapseT); islandEl.classList.remove("open"); $("islandScrim").classList.remove("on"); }
+$("islandPill").addEventListener("click", openIsland);
+$("islandScrim").addEventListener("click", closeIsland);
 
-/* Skala */
-(function(){
-  const box = $("ticks");
+/* Slider: Ziehen und Tippen (gilt für beide Slider) */
+function bindSlider(el){
+  let dragging = false;
+  const fromPointer = e => {
+    const r = el.getBoundingClientRect();
+    setIdx(Math.round(((e.clientX - r.left) / r.width) * LAST));
+  };
+  el.addEventListener("pointerdown", e => {
+    if (state.status !== "idle") return;
+    dragging = true; el.classList.add("dragging");
+    el.setPointerCapture(e.pointerId); fromPointer(e);
+  });
+  el.addEventListener("pointermove", e => { if (dragging) fromPointer(e); });
+  const end = () => { dragging = false; el.classList.remove("dragging"); };
+  el.addEventListener("pointerup", end);
+  el.addEventListener("pointercancel", end);
+  el.addEventListener("keydown", e => {
+    if (state.status !== "idle") return;
+    if (e.key === "ArrowRight" || e.key === "ArrowUp"){ setIdx(state.idx + 1); e.preventDefault(); }
+    if (e.key === "ArrowLeft" || e.key === "ArrowDown"){ setIdx(state.idx - 1); e.preventDefault(); }
+  });
+}
+sliders.forEach(bindSlider);
+
+/* Skalen */
+["ticks", "iTicks"].forEach(id => {
+  const box = $(id);
   CONFIG.ticks.forEach((m, k) => {
     const t = document.createElement("span");
     t.className = "tick" + (k === CONFIG.ticks.length - 1 ? " last" : "");
@@ -614,7 +1120,7 @@ slider.addEventListener("keydown", e => {
     t.textContent = m;
     box.appendChild(t);
   });
-})();
+});
 
 /* Ton */
 function unlockAudio(){
@@ -651,12 +1157,18 @@ async function keepAwake(on){
   } catch(e){ wakeLock = null; }
 }
 
-/* Weiterlaufen nach Seitenwechsel oder Neuladen */
+/* Weiterlaufen nach Seitenwechsel, Zurück-Geste oder Neuladen */
+function resumeIfNeeded(){
+  if (state.status === "running"){
+    if (Date.now() >= state.endAt) finish();
+    else { wakeLock = null; keepAwake(true); loop(); }
+  }
+}
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState !== "visible") return;
-  loadFeed();
-  if (state.status === "running"){ wakeLock = null; keepAwake(true); loop(); }
+  loadFeed(); resumeIfNeeded();
 });
+window.addEventListener("pageshow", e => { if (e.persisted) { loadFeed(); resumeIfNeeded(); } });
 setInterval(() => { if (state.status === "running" && Date.now() >= state.endAt) finish(); }, 1000);
 
 (function restore(){
@@ -672,6 +1184,7 @@ setInterval(() => { if (state.status === "running" && Date.now() >= state.endAt)
   if (state.status === "running") loop();
 })();
 
+applyRoute(parseHash());
 tickClock();
 loadFeed();
 setInterval(loadFeed, CONFIG.feedRefreshMinutes * 60 * 1000);

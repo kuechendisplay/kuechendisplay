@@ -148,7 +148,7 @@ async function enrich(kind, name) {
 }
 
 /* ---------- YouTube ---------- */
-async function latestVideo(prev) {
+async function latestVideos(prev) {
   let firstId = null, channelId = null;
   try {
     const html = await get(CONFIG.youtube);
@@ -174,14 +174,20 @@ async function latestVideo(prev) {
       title = o.title;
     } catch (e) { log(`  oEmbed fehlgeschlagen (${e.message})`); }
   }
-  const published = (entry && entry.published) || (prev && prev.id === id ? prev.published : null);
-  return {
-    id,
-    title: title || (prev && prev.id === id ? prev.title : "Neues Video"),
-    url: "https://www.youtube.com/watch?v=" + id,
-    image: `https://i.ytimg.com/vi/${id}/mqdefault.jpg`,
-    published
-  };
+  const prevVideo = prev && prev.video;
+  const toVideo = (vid, t, published) => ({
+    id: vid, title: t, url: "https://www.youtube.com/watch?v=" + vid,
+    image: `https://i.ytimg.com/vi/${vid}/mqdefault.jpg`, published: published || null
+  });
+  const video = toVideo(id,
+    title || (prevVideo && prevVideo.id === id ? prevVideo.title : "Neues Video"),
+    (entry && entry.published) || (prevVideo && prevVideo.id === id ? prevVideo.published : null));
+
+  // Liste für die Video-Unterseite: neuestes zuerst, ohne Shorts, höchstens 12
+  const list = [video, ...entries
+    .filter(e => e.id !== id && !e.isShort && !/#shorts?\b/i.test(e.title))
+    .map(e => toVideo(e.id, e.title, e.published))].slice(0, 12);
+  return { video, videos: list };
 }
 
 /* ---------- Ablauf ---------- */
@@ -192,7 +198,7 @@ function berlinDate(t) {
 }
 
 async function main() {
-  let prev = { days: {}, video: null };
+  let prev = { days: {}, video: null, videos: null };
   try { prev = Object.assign(prev, JSON.parse(await readFile(FEED_PATH, "utf8"))); } catch {}
 
   const days = {};
@@ -210,12 +216,14 @@ async function main() {
   }
 
   log("Neuestes Video");
-  let video = prev.video;
-  try { video = await latestVideo(prev.video); log(`  ${video.id}: ${video.title}`); }
-  catch (e) { log(`  fehlgeschlagen (${e.message}), bisheriges Video bleibt`); }
+  let video = prev.video, videos = prev.videos || null;
+  try {
+    ({ video, videos } = await latestVideos(prev));
+    log(`  ${video.id}: ${video.title} (${videos.length} Videos in der Liste)`);
+  } catch (e) { log(`  fehlgeschlagen (${e.message}), bisheriger Stand bleibt`); }
 
-  const next = { days, video };
-  if (JSON.stringify(next) === JSON.stringify({ days: prev.days, video: prev.video })) {
+  const next = { days, video, videos };
+  if (JSON.stringify(next) === JSON.stringify({ days: prev.days, video: prev.video, videos: prev.videos || null })) {
     log("Keine Änderung."); return;
   }
   await writeFile(FEED_PATH, JSON.stringify({ updated: new Date().toISOString(), ...next }, null, 2) + "\n");

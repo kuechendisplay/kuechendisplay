@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T13:36:24.095Z",
+  "updated": "2026-11-19T17:20:10.396Z",
   "days": {
     "2026-11-19": {
       "dish": {
@@ -27,13 +27,20 @@
     }
   },
   "video": {
-    "id": "HziUE4ZlWkE",
-    "title": "SIE SCHNAPPT SICH DIE BOX UND BEZAHLT FÜR IHN! 😳 First Dates 💔",
-    "url": "https://www.youtube.com/watch?v=HziUE4ZlWkE",
-    "image": "https://i.ytimg.com/vi/HziUE4ZlWkE/mqdefault.jpg",
-    "published": "2026-11-19T13:00:40+00:00"
+    "id": "djlGiJuEx_8",
+    "title": "1 STUNDE KOMISCHER SOHN BEI SCHWIEGERTOCHTER GESUCHT!",
+    "url": "https://www.youtube.com/watch?v=djlGiJuEx_8",
+    "image": "https://i.ytimg.com/vi/djlGiJuEx_8/mqdefault.jpg",
+    "published": "2026-11-19T17:00:07+00:00"
   },
   "videos": [
+    {
+      "id": "djlGiJuEx_8",
+      "title": "1 STUNDE KOMISCHER SOHN BEI SCHWIEGERTOCHTER GESUCHT!",
+      "url": "https://www.youtube.com/watch?v=djlGiJuEx_8",
+      "image": "https://i.ytimg.com/vi/djlGiJuEx_8/mqdefault.jpg",
+      "published": "2026-11-19T17:00:07+00:00"
+    },
     {
       "id": "HziUE4ZlWkE",
       "title": "SIE SCHNAPPT SICH DIE BOX UND BEZAHLT FÜR IHN! 😳 First Dates 💔",
@@ -110,13 +117,6 @@
       "url": "https://www.youtube.com/watch?v=iH0iXBo2G4U",
       "image": "https://i.ytimg.com/vi/iH0iXBo2G4U/mqdefault.jpg",
       "published": "2026-11-11T13:00:38+00:00"
-    },
-    {
-      "id": "j7VKvCYWaWE",
-      "title": "DER POSER SUCHT NE SÜßE MAUS! 😬 First Dates 💔",
-      "url": "https://www.youtube.com/watch?v=j7VKvCYWaWE",
-      "image": "https://i.ytimg.com/vi/j7VKvCYWaWE/mqdefault.jpg",
-      "published": "2026-11-10T13:00:27+00:00"
     }
   ]
 }

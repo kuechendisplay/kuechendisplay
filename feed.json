@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T09:25:05.603Z",
+  "updated": "2026-11-19T13:36:24.095Z",
   "days": {
     "2026-11-19": {
       "dish": {
@@ -27,13 +27,20 @@
     }
   },
   "video": {
-    "id": "TXPOTDIZZkE",
-    "title": "\"WARUM VIBEST DU NICHT MIT MIR?\" 🤔 First Dates 💔",
-    "url": "https://www.youtube.com/watch?v=TXPOTDIZZkE",
-    "image": "https://i.ytimg.com/vi/TXPOTDIZZkE/mqdefault.jpg",
-    "published": "2026-11-18T13:00:16+00:00"
+    "id": "HziUE4ZlWkE",
+    "title": "SIE SCHNAPPT SICH DIE BOX UND BEZAHLT FÜR IHN! 😳 First Dates 💔",
+    "url": "https://www.youtube.com/watch?v=HziUE4ZlWkE",
+    "image": "https://i.ytimg.com/vi/HziUE4ZlWkE/mqdefault.jpg",
+    "published": "2026-11-19T13:00:40+00:00"
   },
   "videos": [
+    {
+      "id": "HziUE4ZlWkE",
+      "title": "SIE SCHNAPPT SICH DIE BOX UND BEZAHLT FÜR IHN! 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=HziUE4ZlWkE",
+      "image": "https://i.ytimg.com/vi/HziUE4ZlWkE/mqdefault.jpg",
+      "published": "2026-11-19T13:00:40+00:00"
+    },
     {
       "id": "TXPOTDIZZkE",
       "title": "\"WARUM VIBEST DU NICHT MIT MIR?\" 🤔 First Dates 💔",
@@ -110,13 +117,6 @@
       "url": "https://www.youtube.com/watch?v=j7VKvCYWaWE",
       "image": "https://i.ytimg.com/vi/j7VKvCYWaWE/mqdefault.jpg",
       "published": "2026-11-10T13:00:27+00:00"
-    },
-    {
-      "id": "vs6l6FPVpoo",
-      "title": "AM ENDE GIBT'S EINE DISKUSSION 😳 First Dates 💔",
-      "url": "https://www.youtube.com/watch?v=vs6l6FPVpoo",
-      "image": "https://i.ytimg.com/vi/vs6l6FPVpoo/mqdefault.jpg",
-      "published": "2026-11-09T13:00:37+00:00"
     }
   ]
 }

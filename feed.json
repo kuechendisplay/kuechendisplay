@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T05:22:44.055Z",
+  "updated": "2026-11-19T09:25:05.603Z",
   "days": {
     "2026-11-19": {
       "dish": {
@@ -32,5 +32,91 @@
     "url": "https://www.youtube.com/watch?v=TXPOTDIZZkE",
     "image": "https://i.ytimg.com/vi/TXPOTDIZZkE/mqdefault.jpg",
     "published": "2026-11-18T13:00:16+00:00"
-  }
+  },
+  "videos": [
+    {
+      "id": "TXPOTDIZZkE",
+      "title": "\"WARUM VIBEST DU NICHT MIT MIR?\" 🤔 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=TXPOTDIZZkE",
+      "image": "https://i.ytimg.com/vi/TXPOTDIZZkE/mqdefault.jpg",
+      "published": "2026-11-18T13:00:16+00:00"
+    },
+    {
+      "id": "u0nd5D_pI6w",
+      "title": "ER IST SCHOCKIERT! SIE VERRÄT IHM WAS SIE ALLES ZUHAUSE HAT! 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=u0nd5D_pI6w",
+      "image": "https://i.ytimg.com/vi/u0nd5D_pI6w/mqdefault.jpg",
+      "published": "2026-11-17T13:00:29+00:00"
+    },
+    {
+      "id": "QnYEc_72dcU",
+      "title": "1 STUNDE \"FRAUEN STREITEN\" BEI SCHWIEGERTOCHTER GESUCHT!",
+      "url": "https://www.youtube.com/watch?v=QnYEc_72dcU",
+      "image": "https://i.ytimg.com/vi/QnYEc_72dcU/mqdefault.jpg",
+      "published": "2026-11-16T17:00:06+00:00"
+    },
+    {
+      "id": "eJO5pxEA4yU",
+      "title": "ER IST DJ & NIE ZU HAUSE! 🚩 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=eJO5pxEA4yU",
+      "image": "https://i.ytimg.com/vi/eJO5pxEA4yU/mqdefault.jpg",
+      "published": "2026-11-16T13:00:01+00:00"
+    },
+    {
+      "id": "1OJJrqDfGO0",
+      "title": "SIE SUCHT EINEN STARKEN, MASKULINEN MANN! 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=1OJJrqDfGO0",
+      "image": "https://i.ytimg.com/vi/1OJJrqDfGO0/mqdefault.jpg",
+      "published": "2026-11-15T13:00:19+00:00"
+    },
+    {
+      "id": "v4rwyJxD1vM",
+      "title": "SIE ERKLÄRT IHM NOCH AM TISCH WARUM ES NICHTS MIT IHNEN WIRD! 😬 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=v4rwyJxD1vM",
+      "image": "https://i.ytimg.com/vi/v4rwyJxD1vM/mqdefault.jpg",
+      "published": "2026-11-14T13:00:15+00:00"
+    },
+    {
+      "id": "Nb7PxMVupxA",
+      "title": "1 STUNDE \"ERSTE KÜSSE\" BEI SCHWIEGERTOCHTER GESUCHT!",
+      "url": "https://www.youtube.com/watch?v=Nb7PxMVupxA",
+      "image": "https://i.ytimg.com/vi/Nb7PxMVupxA/mqdefault.jpg",
+      "published": "2026-11-13T17:00:23+00:00"
+    },
+    {
+      "id": "vCvhxKzN-ig",
+      "title": "ER ÜBT KOMPLETT DRUCK AUF SIE AUS! 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=vCvhxKzN-ig",
+      "image": "https://i.ytimg.com/vi/vCvhxKzN-ig/mqdefault.jpg",
+      "published": "2026-11-13T13:00:35+00:00"
+    },
+    {
+      "id": "6Tj-LiQ94MM",
+      "title": "ER HAT GAR KEIN INTERESSE 😬 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=6Tj-LiQ94MM",
+      "image": "https://i.ytimg.com/vi/6Tj-LiQ94MM/mqdefault.jpg",
+      "published": "2026-11-12T13:00:23+00:00"
+    },
+    {
+      "id": "iH0iXBo2G4U",
+      "title": "ER HAT NUR EIN KLAPPHANDY & SIE FEIERT ES GAR NICHT! 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=iH0iXBo2G4U",
+      "image": "https://i.ytimg.com/vi/iH0iXBo2G4U/mqdefault.jpg",
+      "published": "2026-11-11T13:00:38+00:00"
+    },
+    {
+      "id": "j7VKvCYWaWE",
+      "title": "DER POSER SUCHT NE SÜßE MAUS! 😬 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=j7VKvCYWaWE",
+      "image": "https://i.ytimg.com/vi/j7VKvCYWaWE/mqdefault.jpg",
+      "published": "2026-11-10T13:00:27+00:00"
+    },
+    {
+      "id": "vs6l6FPVpoo",
+      "title": "AM ENDE GIBT'S EINE DISKUSSION 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=vs6l6FPVpoo",
+      "image": "https://i.ytimg.com/vi/vs6l6FPVpoo/mqdefault.jpg",
+      "published": "2026-11-09T13:00:37+00:00"
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T03:08:20.976Z",
+  "updated": "2026-11-19T05:22:44.055Z",
   "days": {
     "2026-11-19": {
       "dish": {
@@ -21,8 +21,8 @@
       },
       "bake": {
         "name": "Mohnkuchen",
-        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Mohnkuchen",
-        "image": null
+        "url": "https://www.einfachbacken.de/rezepte/mohnkuchen-mit-streusel-der-leckere-klassiker",
+        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2019-04/mohnkuchen.jpg?h=a1e1a043&itok=aqf3TIPw"
       }
     }
   },

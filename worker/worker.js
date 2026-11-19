@@ -1,7 +1,22 @@
-/* Rezept-Vermittler für das Küchendisplay (Cloudflare Worker)
-   Holt eine Rezeptseite von einer erlaubten Seite, liest die strukturierten
-   Rezeptdaten (schema.org/Recipe aus JSON-LD) und gibt nur diese als JSON zurück.
-   Speichert nichts. Aufruf: GET /?url=<Rezept-URL> */
+/* Worker für das Küchendisplay (Cloudflare Worker)
+   GET  /?url=<Rezept-URL>  Rezeptdaten (schema.org/Recipe aus JSON-LD) von Chefkoch/Einfach Backen als JSON
+   POST /ask                Sprachfrage (Audio) → Text (Whisper) → Antwort (Workers AI oder Claude)
+   Speichert nichts.
+
+   Einstellungen in Cloudflare (Settings → Variables and Secrets / Bindings):
+   - Binding AI (Workers AI)          Pflicht für /ask
+   - Secret ANTHROPIC_API_KEY         optional: dann antwortet Claude statt des Workers-AI-Modells
+   - Variable AI_MODEL / CLAUDE_MODEL optional: anderes Modell */
+
+const DEFAULT_AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
+const DEFAULT_CLAUDE_MODEL = "claude-haiku-5-5";
+const SYSTEM_PROMPT = [
+  "Du bist die Küchenhilfe auf einem Küchendisplay in einem deutschen Haushalt.",
+  "Antworte auf Deutsch, freundlich und knapp: meist zwei bis vier Sätze, die man im Stehen am Herd lesen kann.",
+  "Kein Markdown, keine Aufzählungszeichen, keine Überschriften.",
+  "Nutze metrische Einheiten und Celsius. Schreibe Zeitangaben als Zahl mit „Minuten“ oder „Stunden“, z. B. „6 Minuten“.",
+  "Wenn eine Frage nichts mit Kochen, Backen oder Haushalt zu tun hat, beantworte sie trotzdem kurz."
+].join(" ");
 
 const ALLOWED_HOSTS = ["www.chefkoch.de", "chefkoch.de", "www.einfachbacken.de", "einfachbacken.de"];
 const ALLOWED_ORIGINS = ["https://kuechendisplay.github.io", "http://localhost:8000", "http://127.0.0.1:8000"];
@@ -9,14 +24,16 @@ const ALLOWED_ORIGINS = ["https://kuechendisplay.github.io", "http://localhost:8
 const UA = "Mozilla/5.0 (Linux; Android 14; SM-P613) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
 
 export default {
-  async fetch(request) {
+  async fetch(request, env = {}) {
     const origin = request.headers.get("Origin") || "";
     const cors = {
       "Access-Control-Allow-Origin": ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0],
-      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
       "Vary": "Origin"
     };
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+    if (new URL(request.url).pathname === "/ask") return ask(request, env, origin, cors);
     if (request.method !== "GET") return json({ error: "Nur GET" }, 405, cors);
 
     let target;
@@ -44,6 +61,67 @@ export default {
     return json(recipe, 200, { ...cors, "Cache-Control": "public, max-age=3600" });
   }
 };
+
+/* ---------- Sprachfrage ---------- */
+async function ask(request, env, origin, cors) {
+  if (request.method !== "POST") return json({ error: "Nur POST" }, 405, cors);
+  if (!ALLOWED_ORIGINS.includes(origin)) return json({ error: "Nicht erlaubt" }, 403, cors);
+  if (!env.AI) return json({ error: "Workers-AI-Binding AI fehlt" }, 500, cors);
+  const audio = await request.arrayBuffer();
+  if (audio.byteLength < 1000) return json({ error: "Keine Aufnahme" }, 400, cors);
+  if (audio.byteLength > 4_000_000) return json({ error: "Aufnahme zu lang" }, 413, cors);
+  try {
+    const question = (await transcribe(env, audio)).trim();
+    if (!question) return json({ error: "Nichts verstanden" }, 422, cors);
+    const answer = cleanAnswer(await answerQuestion(env, question));
+    return json({ question, answer, model: env.ANTHROPIC_API_KEY ? "claude" : "workers-ai" }, 200, cors);
+  } catch (e) {
+    return json({ error: "Antwort fehlgeschlagen" }, 502, cors);
+  }
+}
+
+function toBase64(buf) {
+  const bytes = new Uint8Array(buf);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+
+export async function transcribe(env, audio) {
+  try {
+    const r = await env.AI.run("@cf/openai/whisper-large-v3-turbo", { audio: toBase64(audio), language: "de" });
+    if (r && r.text) return r.text;
+  } catch {}
+  const r = await env.AI.run("@cf/openai/whisper", { audio: [...new Uint8Array(audio)] });
+  return (r && r.text) || "";
+}
+
+export async function answerQuestion(env, question) {
+  if (env.ANTHROPIC_API_KEY) {
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-api-key": env.ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
+      body: JSON.stringify({ model: env.CLAUDE_MODEL || DEFAULT_CLAUDE_MODEL, max_tokens: 400, system: SYSTEM_PROMPT, messages: [{ role: "user", content: question }] })
+    });
+    if (!r.ok) throw new Error("Claude " + r.status);
+    const d = await r.json();
+    return (d.content || []).filter(c => c.type === "text").map(c => c.text).join("\n");
+  }
+  const r = await env.AI.run(env.AI_MODEL || DEFAULT_AI_MODEL, {
+    messages: [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: question }],
+    max_tokens: 400
+  });
+  return (r && (r.response || r.result && r.result.response)) || "";
+}
+
+export function cleanAnswer(t) {
+  return String(t || "")
+    .replace(/\*\*|__|`/g, "")
+    .replace(/^\s*#+\s*/gm, "")
+    .replace(/^\s*[-*•]\s+/gm, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
 
 function json(data, status, headers) {
   return new Response(JSON.stringify(data), {

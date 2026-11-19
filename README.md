@@ -1,6 +1,6 @@
 # Küchendisplay
 
-Startseite für ein Tablet in der Küche: große Uhr, Datum, Koch- und Backidee des Tages mit Vorschaubild, das neueste Video von Daily Ceddo und ein Timer (1–45 min, gestaffelte Skala).
+Startseite für ein Tablet in der Küche: große Uhr, Datum, Rezept-Stapel mit Koch- und Backidee des Tages, das neueste Video von Daily Ceddo, Spotify-Steuerung, eine Küchenhilfe per Sprachfrage und ein Timer (1–45 min, gestaffelte Skala).
 
 ## Aufbau
 
@@ -64,6 +64,23 @@ Mit Fully Kiosk PLUS lassen sich auch die Rezepte einbetten:
    *duckduckgo.com*
    ```
 2. In `index.html` im Block `<script id="shared">` `embedSites: true` setzen.
+
+## Spotify
+
+Die Kachel steuert die Wiedergabe über die Spotify Web API und zeigt an, was gerade läuft. Gespielt wird auf einem Spotify-Connect-Gerät (Echo, Spotify-App auf dem Tablet o. ä.), das Gerät wählt man oben rechts in der Kachel.
+
+1. developer.spotify.com/dashboard → Create app, Redirect URI `https://kuechendisplay.github.io/kuechendisplay/`, API „Web API“.
+2. Unter „User Management“ das eigene Spotify-Konto eintragen.
+3. Client-ID in `index.html` bei `spotifyClientId` eintragen (kein Secret nötig, Anmeldung per PKCE).
+4. Auf dem Tablet in der Kachel „Verbinden“ tippen und einmal anmelden.
+
+## Küchenhilfe (Sprachfrage)
+
+Mikrofon antippen, Frage stellen, die Antwort erscheint als Text. Zeitangaben in der Antwort starten den Timer. Die Aufnahme geht an den Worker (`/ask`): Whisper wandelt sie in Text, ein Workers-AI-Modell antwortet. Beides im kostenlosen Workers-AI-Kontingent.
+
+- Im Worker: Settings → Bindings → Workers AI mit Variablenname `AI`.
+- Optional Claude statt Workers AI: Secret `ANTHROPIC_API_KEY` im Worker anlegen (kostenpflichtig, nutzungsabhängig).
+- In Fully Kiosk ist der Mikrofonzugriff eine PLUS-Funktion („Enable Microphone Access“). Im normalen Chrome funktioniert er ohne Zusatz.
 
 ## Verhalten
 

@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import worker, { extractRecipe, isoMinutes, clean } from "./worker.js";
+import worker, { extractRecipe, isoMinutes, clean, cleanAnswer } from "./worker.js";
 
 const page = `<html><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage"},{"@type":"Recipe","name":"Pilzrisotto &amp; Parmesan","image":["https://img.x/1x1.jpg","https://img.x/4x3.jpg"],
 "recipeYield":"4 Portionen","totalTime":"P0DT0H45M","prepTime":"PT15M","author":{"name":"Koch"},
@@ -30,4 +30,23 @@ const bad = await worker.fetch(new Request("https://w.dev/?url=" + encodeURIComp
 assert.equal(bad.status, 403);
 const noData = (globalThis.fetch = async () => new Response("<html></html>"), await worker.fetch(new Request("https://w.dev/?url=" + encodeURIComponent("https://www.einfachbacken.de/rezepte/x"))));
 assert.equal(noData.status, 404);
+// Sprachfrage mit simuliertem Workers AI
+const calls = [];
+const env = { AI: { run: async (model, input) => {
+  calls.push(model);
+  if (model.includes("whisper")) return { text: " Wie lange kocht ein Ei wachsweich? " };
+  return { response: "**Ei:** Ins kochende Wasser geben und 6 Minuten kochen.\n- danach abschrecken" };
+} } };
+const audio = new Uint8Array(5000).fill(7);
+const askRes = await worker.fetch(new Request("https://w.dev/ask", { method: "POST", body: audio, headers: { Origin: "https://kuechendisplay.github.io", "Content-Type": "audio/webm" } }), env);
+assert.equal(askRes.status, 200);
+const a = await askRes.json();
+assert.equal(a.question, "Wie lange kocht ein Ei wachsweich?");
+assert.equal(a.answer, "Ei: Ins kochende Wasser geben und 6 Minuten kochen.\ndanach abschrecken");
+assert.equal(a.model, "workers-ai");
+assert.ok(calls[0].includes("whisper-large-v3-turbo"));
+const forbidden = await worker.fetch(new Request("https://w.dev/ask", { method: "POST", body: audio, headers: { Origin: "https://evil.example" } }), env);
+assert.equal(forbidden.status, 403);
+const noAi = await worker.fetch(new Request("https://w.dev/ask", { method: "POST", body: audio, headers: { Origin: "https://kuechendisplay.github.io" } }), {});
+assert.equal(noAi.status, 500);
 console.log("Worker-Tests OK");

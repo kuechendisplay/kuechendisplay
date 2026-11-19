@@ -18,6 +18,7 @@
   --label:#000000; --label-2:rgba(60,60,67,.6); --label-3:rgba(60,60,67,.3); --sep:rgba(60,60,67,.18);
   --track:rgba(120,120,128,.16); --fill-idle:#3A3A3C; --hairline:rgba(0,0,0,.08);
   --orange:#FF9500; --orange-ink:#C93400; --green:#34C759; --green-ink:#248A3D; --red:#FF3B30; --pink:#FF2D55;
+  --spotify:#1ED760; --spotify-ink:#14833B; --claude:#D97757; --claude-ink:#B4532F;
   --tint-green:rgba(52,199,89,.16); --tint-orange:rgba(255,149,0,.16); --tint-gray:rgba(120,120,128,.16);
   --scrim:rgba(0,0,0,.3);
   --spring:cubic-bezier(.32,.72,0,1);
@@ -32,6 +33,7 @@
     --label:#FFFFFF; --label-2:rgba(235,235,245,.6); --label-3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
     --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --hairline:rgba(255,255,255,.08);
     --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A; --pink:#FF375F;
+    --spotify-ink:#1ED760; --claude-ink:#E39A80;
     --tint-green:rgba(48,209,88,.2); --tint-orange:rgba(255,159,10,.2); --tint-gray:rgba(120,120,128,.32);
     --scrim:rgba(0,0,0,.55);
     color-scheme:dark;
@@ -42,6 +44,7 @@
   --label:#FFFFFF; --label-2:rgba(235,235,245,.6); --label-3:rgba(235,235,245,.3); --sep:rgba(84,84,88,.55);
   --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --hairline:rgba(255,255,255,.08);
   --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A; --pink:#FF375F;
+  --spotify-ink:#1ED760; --claude-ink:#E39A80;
   --tint-green:rgba(48,209,88,.2); --tint-orange:rgba(255,159,10,.2); --tint-gray:rgba(120,120,128,.32);
   --scrim:rgba(0,0,0,.55);
   color-scheme:dark;
@@ -63,27 +66,22 @@ button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:poin
 :focus-visible{outline:3px solid var(--orange);outline-offset:3px}
 svg.i{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* ---------- Layout Startseite ---------- */
+/* ---------- Startseite ---------- */
 .board{
   height:100%;
   display:grid;
-  grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);
-  grid-template-rows:minmax(0,1fr) auto;
+  grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr);
   gap:16px;
   padding:20px max(24px,env(safe-area-inset-right,0px)) 24px max(24px,env(safe-area-inset-left,0px));
 }
 body:not([data-view="home"]) .board{display:none}
+.clock{display:flex;flex-direction:column;justify-content:center;padding:0 8px 112px 10px;min-width:0;transition:opacity .4s}
+body.timer-open .clock{opacity:.3}
+.time{font-size:min(14.6vw,25vh);font-weight:600;line-height:.9;letter-spacing:-.045em;font-variant-numeric:tabular-nums;margin-left:-.04em}
+.date{margin:.55em 0 0;font-size:clamp(20px,2.3vw,30px);font-weight:500;letter-spacing:-.012em;color:var(--label-2)}
 
-/* ---------- Uhr ---------- */
-.clock{grid-column:1;grid-row:1;display:flex;flex-direction:column;justify-content:center;padding:0 8px 0 10px;min-width:0}
-.time{
-  font-size:min(15vw,30vh); font-weight:600; line-height:.9;
-  letter-spacing:-.045em; font-variant-numeric:tabular-nums; margin-left:-.04em;
-}
-.date{margin:.55em 0 0;font-size:clamp(20px,2.4vw,32px);font-weight:500;letter-spacing:-.012em;color:var(--label-2)}
-
-/* ---------- Karten rechts ---------- */
-.side{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:14px;min-height:0}
+.side{display:flex;flex-direction:column;gap:14px;min-height:0}
 .card{background:var(--card);border-radius:22px;overflow:hidden}
 .source{flex:1;display:flex;flex-direction:column;min-height:0}
 .row{display:flex;align-items:center;gap:12px;padding:10px 16px 10px 14px;min-height:56px;transition:background-color .15s}
@@ -104,8 +102,44 @@ body:not([data-view="home"]) .board{display:none}
   font-size:clamp(20px,2.1vw,27px);font-weight:650;letter-spacing:-.02em;line-height:1.14;
   display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
 }
-.video .idea-title{font-size:clamp(16px,1.5vw,19px);font-weight:600;letter-spacing:-.008em;line-height:1.26;-webkit-line-clamp:3}
-.row:active,.idea:active{background:var(--card-press)}
+.video .idea-title{font-size:clamp(16px,1.5vw,19px);font-weight:600;letter-spacing:-.008em;line-height:1.26;-webkit-line-clamp:2}
+a.row:active,a.idea:active{background:var(--card-press)}
+
+/* Rezept-Stapel (Chefkoch / Einfach Backen) */
+.stack-wrap{position:relative;flex:1.3;min-height:0;padding-top:8px}
+.stack-peek{position:absolute;top:0;left:18px;right:18px;height:24px;border-radius:16px;background:var(--card-press)}
+.stack{position:relative;height:100%}
+.stack-scroll{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.stack-scroll::-webkit-scrollbar{display:none}
+.stack-page{height:100%;scroll-snap-align:start;scroll-snap-stop:always}
+.stack .idea{padding-right:30px}
+.stack .row{padding-right:30px}
+.stack-dots{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;pointer-events:none}
+.stack-dots span{width:6px;height:6px;border-radius:50%;background:var(--label-3);transition:background-color .2s}
+.stack-dots span.on{background:var(--label)}
+
+/* Spotify */
+.spotify .glyph svg{color:#000;stroke:#000}
+.sp-dev{flex:none;max-width:48%;padding:10px 0 10px 8px;font-size:13px;font-weight:600;color:var(--spotify-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-body{gap:16px;padding-right:16px}
+.sp-cover{position:relative;flex:none;height:min(104px,100cqh);aspect-ratio:1;border-radius:12px;overflow:hidden;display:grid;place-items:center;background:var(--track);background:color-mix(in srgb, var(--spotify) 15%, var(--card))}
+.sp-cover svg{width:34px;height:34px;color:var(--spotify-ink);stroke:var(--spotify-ink)}
+.sp-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sp-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.sp-title{font-size:18px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-artist{font-size:14px;color:var(--label-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-bar{height:4px;border-radius:2px;background:var(--track);overflow:hidden}
+.sp-bar i{display:block;height:100%;width:0;background:var(--label);border-radius:2px}
+.sp-ctrl{flex:none;display:flex;align-items:center;gap:2px}
+.sp-btn{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:var(--label);transition:transform .12s}
+.sp-btn svg{width:22px;height:22px}
+.sp-btn:active{transform:scale(.9)}
+.sp-play{width:58px;height:58px;background:var(--label);color:var(--card)}
+.sp-play .ic-pause,[data-sp="playing"] .sp-play .ic-play{display:none}
+[data-sp="playing"] .sp-play .ic-pause{display:block}
+.sp-connect{display:none;flex:none;height:46px;padding:0 20px;border-radius:23px;background:var(--spotify);color:#000;font-size:15px;font-weight:600}
+[data-sp="off"] .sp-ctrl,[data-sp="login"] .sp-ctrl,[data-sp="off"] .sp-bar,[data-sp="login"] .sp-bar,[data-sp="off"] .sp-dev,[data-sp="login"] .sp-dev{display:none}
+[data-sp="login"] .sp-connect{display:block}
 
 /* ---------- Vorschaubilder ---------- */
 .thumb{
@@ -130,44 +164,6 @@ body:not([data-view="home"]) .board{display:none}
 .play svg{width:16px;height:16px;color:#fff;margin-left:2px}
 .thumb.has-img .play{opacity:1}
 
-/* ---------- Timer (Startseite) ---------- */
-.timer{
-  grid-column:1 / -1;grid-row:2;
-  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:28px;
-  padding:20px 26px 20px 28px;
-  view-transition-name:timer;
-}
-.readout{width:190px;display:flex;flex-direction:column;gap:4px}
-.readout-time{font-size:58px;font-weight:600;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
-.readout-state{font-size:15px;color:var(--label-2);white-space:nowrap}
-.slider-wrap{display:flex;flex-direction:column;gap:10px;padding-top:8px}
-.slider{position:relative;height:72px;border-radius:999px;background:var(--track);overflow:hidden;touch-action:none;cursor:grab;isolation:isolate}
-.fill{
-  position:absolute;inset:0;background:var(--fill-idle);
-  transform:translateX(-50%);will-change:transform;
-  transition:transform .4s cubic-bezier(.2,.8,.2,1),background-color .3s,opacity .3s;
-}
-.slider.dragging .fill{transition:background-color .3s,opacity .3s}
-.slider.dragging{cursor:grabbing}
-[data-status="running"] .fill{background:var(--orange);transition:background-color .3s,opacity .3s}
-[data-status="paused"] .fill{background:var(--orange);opacity:.45}
-[data-status="done"] .fill{background:var(--red)}
-.timer:not([data-status="idle"]) .slider,.island:not([data-status="idle"]) .slider{cursor:default}
-.ticks{position:relative;height:18px;font-size:13px;font-weight:500;color:var(--label-2);font-variant-numeric:tabular-nums}
-.tick{position:absolute;top:0;transform:translateX(-50%)}
-.tick.last{transform:translateX(-100%)}
-.actions{display:flex;gap:20px;padding:6px}
-.round{
-  width:96px;height:96px;border-radius:50%;display:grid;place-items:center;
-  font-size:15px;font-weight:600;letter-spacing:-.01em;
-  transition:transform .12s,opacity .2s,background-color .2s,color .2s,box-shadow .2s;
-}
-.round:active{transform:scale(.95)}
-.r-gray{background:var(--tint-gray);color:var(--label);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-gray)}
-.r-gray:disabled{opacity:.35;cursor:default;transform:none}
-.r-green{background:var(--tint-green);color:var(--green-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-green)}
-.r-orange{background:var(--tint-orange);color:var(--orange-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-orange)}
-
 /* ---------- Unterseiten ---------- */
 .sub{display:none;position:fixed;inset:0;background:var(--bg)}
 body[data-view="video"] #videoView{display:grid}
@@ -183,6 +179,7 @@ body[data-view="web"] #webView{display:block}
   box-shadow:0 0 0 1px var(--hairline);
 }
 .player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player > div{position:absolute;inset:0}
 .vv-title{margin:12px 0 0;font-size:22px;font-weight:650;letter-spacing:-.018em;line-height:1.22;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .vv-meta{margin:0;font-size:15px;color:var(--label-2)}
 .vv-list{min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:4px;margin-top:-6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -248,6 +245,100 @@ body[data-view="recipe"] #recipeView{display:grid}
 .spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--track);border-top-color:var(--label-2);animation:spin .9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ---------- Mikrofon + Timer (Dock) ---------- */
+.dock{
+  --h:88px; --wc:228px; --ow:min(640px, calc((100vw - 64px) * .5098 - 10px - 88px - 22px)); --oh:216px;
+  position:fixed;z-index:16;display:flex;align-items:flex-end;gap:22px;
+  left:calc(34px + env(safe-area-inset-left,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  view-transition-name:dock;
+}
+body:not([data-view="home"]) .dock{
+  --h:60px; --wc:150px; --ow:min(600px, calc(100vw - 32px - 74px)); --oh:204px;
+  left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);gap:14px;
+}
+.mic-btn{
+  flex:none;width:var(--h);height:var(--h);border-radius:50%;display:grid;place-items:center;
+  background:var(--card);box-shadow:0 0 0 1px var(--hairline);transition:transform .15s var(--spring);
+}
+.mic-btn:active{transform:scale(.92)}
+.mic-btn svg{width:calc(var(--h) * .42);height:calc(var(--h) * .42);stroke:var(--claude-ink)}
+body:not([data-view="home"]) .mic-btn,body:not([data-view="home"]) .island{
+  background:#000;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 14px 34px rgba(0,0,0,.4);
+}
+body:not([data-view="home"]) .mic-btn svg{stroke:#E39A80}
+body[data-view="ask"] .mic-btn{display:none}
+
+.island{
+  position:relative;flex:none;width:var(--wc);height:var(--h);border-radius:calc(var(--h) / 2);
+  background:var(--card);box-shadow:0 0 0 1px var(--hairline);overflow:hidden;
+  transition:width .55s var(--spring),height .55s var(--spring),border-radius .55s var(--spring),box-shadow .3s;
+}
+body:not([data-view="home"]) .island{
+  --label:#FFFFFF; --label-2:rgba(235,235,245,.6); --label-3:rgba(235,235,245,.3);
+  --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --card:#000000;
+  --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A;
+  --tint-green:rgba(48,209,88,.22); --tint-orange:rgba(255,159,10,.22); --tint-gray:rgba(120,120,128,.34);
+  color:#fff;
+}
+.island.open{width:var(--ow);height:var(--oh);border-radius:38px;box-shadow:0 0 0 1px var(--hairline),0 18px 44px rgba(0,0,0,.28)}
+.island-pill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:calc(var(--h) * .16);color:var(--label);transition:opacity .2s}
+.island.open .island-pill{opacity:0;pointer-events:none}
+.ring{flex:none;width:calc(var(--h) * .47);height:calc(var(--h) * .47)}
+.ring-bg{fill:none;stroke:var(--track);stroke-width:2.4}
+.ring-fg{fill:none;stroke:var(--orange);stroke-width:2.4;stroke-linecap:round;stroke-dasharray:69.115;stroke-dashoffset:69.115;transition:stroke .3s}
+.hands{fill:none;stroke:var(--label);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
+.island-time{font-size:calc(var(--h) * .31);font-weight:600;letter-spacing:-.015em;font-variant-numeric:tabular-nums;min-width:3.2ch;transition:color .3s}
+.island[data-status="running"] .hands,.island[data-status="paused"] .hands{stroke:var(--orange)}
+.island[data-status="running"] .island-time{color:var(--orange)}
+.island[data-status="paused"] .island-time{color:var(--orange);opacity:.6}
+.island[data-status="done"]{animation:pulse 1.2s ease-in-out infinite}
+.island[data-status="done"] .hands,.island[data-status="done"] .ring-bg{stroke:var(--red)}
+.island[data-status="done"] .island-time{color:var(--red)}
+@keyframes pulse{50%{box-shadow:0 0 0 1px rgba(255,69,58,.6),0 0 0 8px rgba(255,69,58,.18)}}
+.island-panel{
+  position:absolute;left:0;bottom:0;width:var(--ow);height:var(--oh);
+  padding:20px 22px 16px 26px;display:flex;flex-direction:column;justify-content:space-between;
+  opacity:0;pointer-events:none;transition:opacity .15s;
+}
+body:not([data-view="home"]) .island-panel{left:50%;transform:translateX(-50%)}
+.island.open .island-panel{opacity:1;pointer-events:auto;transition:opacity .3s .14s}
+.ip-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.ip-readout{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ip-time{font-size:46px;font-weight:600;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.ip-state{font-size:14px;color:var(--label-2);white-space:nowrap}
+.actions{display:flex;gap:16px;padding:5px}
+.round{
+  width:66px;height:66px;border-radius:50%;display:grid;place-items:center;
+  font-size:12.5px;font-weight:600;letter-spacing:-.01em;
+  transition:transform .12s,opacity .2s,background-color .2s,color .2s,box-shadow .2s;
+}
+.round:active{transform:scale(.95)}
+.r-gray{background:var(--tint-gray);color:var(--label);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-gray)}
+.r-gray:disabled{opacity:.35;cursor:default;transform:none}
+.r-green{background:var(--tint-green);color:var(--green-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-green)}
+.r-orange{background:var(--tint-orange);color:var(--orange-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-orange)}
+.slider-wrap{display:flex;flex-direction:column;gap:6px}
+.slider{position:relative;height:50px;border-radius:999px;background:var(--track);overflow:hidden;touch-action:none;cursor:grab;isolation:isolate}
+.fill{
+  position:absolute;inset:0;background:var(--fill-idle);
+  transform:translateX(-50%);will-change:transform;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),background-color .3s,opacity .3s;
+}
+.slider.dragging .fill{transition:background-color .3s,opacity .3s}
+.slider.dragging{cursor:grabbing}
+[data-status="running"] .fill{background:var(--orange);transition:background-color .3s,opacity .3s}
+[data-status="paused"] .fill{background:var(--orange);opacity:.45}
+[data-status="done"] .fill{background:var(--red)}
+.island:not([data-status="idle"]) .slider{cursor:default}
+.ticks{position:relative;height:15px;font-size:12px;font-weight:500;color:var(--label-2);font-variant-numeric:tabular-nums}
+.tick{position:absolute;top:0;transform:translateX(-50%)}
+.tick.last{transform:translateX(-100%)}
+.island-scrim{display:none;position:fixed;inset:0;z-index:15}
+.island-scrim.on{display:block}
+
+::view-transition-group(dock){animation-duration:.55s;animation-timing-function:var(--spring)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.28s}
+
 /* ---------- Home-Button ---------- */
 .home-btn{
   display:none;position:fixed;z-index:15;
@@ -263,56 +354,32 @@ body:not([data-view="home"]) .home-btn{display:grid}
 .home-btn:active{transform:scale(.9)}
 .home-btn svg{width:24px;height:24px;stroke:currentColor}
 
-/* ---------- Timer-Insel (Unterseiten) ---------- */
-.island{
-  --label:#FFFFFF; --label-2:rgba(235,235,245,.6); --label-3:rgba(235,235,245,.3);
-  --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --card:#000000;
-  --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A;
-  --tint-green:rgba(48,209,88,.22); --tint-orange:rgba(255,159,10,.22); --tint-gray:rgba(120,120,128,.34);
-  display:none;position:fixed;z-index:16;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));
-  width:150px;height:50px;border-radius:25px;transform:translateX(-50%);
-  background:#000;color:#fff;overflow:hidden;
-  box-shadow:0 0 0 1px rgba(255,255,255,.07),0 14px 34px rgba(0,0,0,.32);
-  transition:width .55s var(--spring),height .55s var(--spring),border-radius .55s var(--spring),box-shadow .3s;
-  view-transition-name:timer;
+/* ---------- Küchenhilfe (Sprachfrage) ---------- */
+body[data-view="ask"] #askView{display:grid}
+#askView{
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;
+  padding:calc(96px + env(safe-area-inset-top,0px)) 64px calc(110px + env(safe-area-inset-bottom,0px)) 40px;
 }
-body:not([data-view="home"]) .island{display:block}
-.island.open{width:min(640px, calc(100vw - 32px));height:204px;border-radius:38px}
-.island-pill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff;transition:opacity .2s}
-.island.open .island-pill{opacity:0;pointer-events:none}
-.ring{flex:none;width:28px;height:28px}
-.ring-bg{fill:none;stroke:rgba(255,255,255,.2);stroke-width:2.6}
-.ring-fg{fill:none;stroke:var(--orange);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:69.115;stroke-dashoffset:69.115;transition:stroke .3s}
-.hands{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
-.island-time{font-size:17px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums;min-width:3.4ch;transition:color .3s}
-.island[data-status="running"] .hands,.island[data-status="paused"] .hands{stroke:var(--orange)}
-.island[data-status="running"] .island-time{color:var(--orange)}
-.island[data-status="paused"] .island-time{color:rgba(255,159,10,.6)}
-.island[data-status="done"]{animation:pulse 1.2s ease-in-out infinite}
-.island[data-status="done"] .hands,.island[data-status="done"] .ring-bg{stroke:var(--red)}
-.island[data-status="done"] .island-time{color:var(--red)}
-@keyframes pulse{50%{box-shadow:0 0 0 1px rgba(255,69,58,.6),0 0 0 8px rgba(255,69,58,.18),0 14px 34px rgba(0,0,0,.32)}}
-.island-panel{
-  position:absolute;top:0;left:50%;width:min(640px, calc(100vw - 32px));height:204px;transform:translateX(-50%);
-  padding:20px 26px 18px 30px;display:flex;flex-direction:column;justify-content:space-between;
-  opacity:0;pointer-events:none;transition:opacity .15s;
-}
-.island.open .island-panel{opacity:1;pointer-events:auto;transition:opacity .3s .14s}
-.ip-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.ip-readout{display:flex;flex-direction:column;gap:2px}
-.ip-time{font-size:44px;font-weight:600;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
-.ip-state{font-size:14px;color:var(--label-2);white-space:nowrap}
-.island .actions{gap:16px;padding:5px}
-.island .round{width:64px;height:64px;font-size:12.5px}
-.island .slider{height:46px}
-.island .slider-wrap{gap:6px;padding-top:0}
-.island .ticks{font-size:12px;height:15px}
-.island-scrim{display:none;position:fixed;inset:0;z-index:15}
-.island-scrim.on{display:block}
-
-::view-transition-group(timer){animation-duration:.55s;animation-timing-function:var(--spring)}
-::view-transition-old(timer),::view-transition-new(timer){height:100%;width:100%}
-::view-transition-old(root),::view-transition-new(root){animation-duration:.28s}
+.ask-left{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;min-height:0}
+.ask-mic-wrap{position:relative;width:340px;height:340px;display:grid;place-items:center}
+.ask-ring{position:absolute;border-radius:50%;background:var(--claude);transition:transform .12s linear,opacity .3s}
+.ask-ring.r1{width:340px;height:340px;opacity:.08}
+.ask-ring.r2{width:268px;height:268px;opacity:.16}
+#askView:not([data-state="listening"]) .ask-ring{transform:scale(.72)}
+.ask-mic{position:relative;width:196px;height:196px;border-radius:50%;background:var(--claude);display:grid;place-items:center;transition:transform .15s var(--spring)}
+.ask-mic:active{transform:scale(.95)}
+.ask-mic svg{width:78px;height:78px;stroke:#fff;stroke-width:1.8}
+#askView[data-state="thinking"] .ask-mic{animation:breathe 1.4s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(.94);opacity:.75}}
+.ask-status{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.ask-status b{font-size:26px;font-weight:600;letter-spacing:-.015em}
+.ask-status span{font-size:16px;color:var(--label-2)}
+.ask-right{display:flex;flex-direction:column;justify-content:center;gap:22px;min-width:0;min-height:0;overflow-y:auto;scrollbar-width:none}
+.ask-right::-webkit-scrollbar{display:none}
+.ask-label{font-size:15px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--claude-ink)}
+.ask-q{margin:0;font-size:24px;line-height:1.35;font-weight:500;color:var(--label-2)}
+.ask-a{margin:0;font-size:31px;line-height:1.42;font-weight:500;letter-spacing:-.012em;white-space:pre-line}
+.ask-a.hint{font-size:26px;color:var(--label-2)}
 
 /* ---------- Dialoge ---------- */
 .overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:24px;background:var(--scrim);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
@@ -326,27 +393,34 @@ body:not([data-view="home"]) .island{display:block}
 .sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .stop:active,.btn-1:active,.btn-2:active{opacity:.85}
 @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.dev-list{display:flex;flex-direction:column;gap:8px;margin:-10px 0 18px}
+.dev-item{display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px;padding:0 18px;border-radius:16px;background:var(--tint-gray);font-size:17px;font-weight:600;text-align:left}
+.dev-item small{font-size:13px;font-weight:500;color:var(--label-2)}
+.dev-item[aria-current="true"]{background:color-mix(in srgb, var(--spotify) 22%, transparent);color:var(--spotify-ink)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
 /* ---------- Hochformat / kleine Displays ---------- */
 @media (max-aspect-ratio: 1/1), (max-width: 760px){
   html,body{height:auto;min-height:100%}
-  .board{height:auto;min-height:100%;grid-template-columns:minmax(0,1fr);grid-template-rows:none}
-  .clock,.side,.timer{grid-column:1;grid-row:auto}
+  .board{height:auto;min-height:100%;grid-template-columns:minmax(0,1fr);grid-template-rows:none;padding-bottom:130px}
   .clock{padding:32px 8px 24px}
   .time{font-size:min(26vw,20vh)}
   .idea{min-height:150px;height:150px}
-  .timer{grid-template-columns:minmax(0,1fr) auto;gap:20px}
-  .timer > .slider-wrap{grid-column:1 / -1;grid-row:2}
-  .readout{width:auto}
+  .stack-wrap{flex:none;height:230px}
+  .dock{--ow:min(600px, calc(100vw - 32px - 110px))}
   #videoView{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:16px}
+  .player{width:100%}
   #recipeView{display:none;grid-template-columns:minmax(0,1fr);overflow-y:auto}
   body[data-view="recipe"] #recipeView{display:block}
   .rv-side,.rv-steps{overflow:visible;padding-bottom:20px}
   .rv-steps{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
-  .player{width:100%}
+  #askView{grid-template-columns:minmax(0,1fr);padding:90px 24px 110px;gap:20px}
+  .ask-mic-wrap{width:260px;height:260px}
+  .ask-ring.r1{width:260px;height:260px} .ask-ring.r2{width:210px;height:210px}
+  .ask-mic{width:150px;height:150px}
 }
-@media (max-width: 520px){ .idea{padding-left:20px;height:120px;min-height:120px} .idea::before{left:20px} }
 </style>
 </head>
 <body data-view="home">
@@ -354,6 +428,11 @@ body:not([data-view="home"]) .island{display:block}
   <symbol id="i-fork" viewBox="0 0 24 24"><path d="M6 3v5a2 2 0 0 0 4 0V3M8 10v11M17.5 21V3c-2.2 1.3-3.2 4-3.2 8h3.2"/></symbol>
   <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 20h16M5.5 20v-7.5h13V20M5.5 15.5c1.6 1 3.1 1 4.6 0s3.1-1 4.6 0 3.1 1 3.8 0M12 12.5V9"/><path stroke="none" fill="currentColor" d="M12 4.2c.9 1 1.4 1.8 1.4 2.5a1.4 1.4 0 0 1-2.8 0c0-.7.5-1.5 1.4-2.5z"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path stroke="none" fill="currentColor" d="M8 5.6v12.8L18.4 12z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path stroke="none" fill="currentColor" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path stroke="none" fill="currentColor" d="M6 6h2.2v12H6zM19 6v12l-9.5-6z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path stroke="none" fill="currentColor" d="M15.8 6H18v12h-2.2zM5 6v12l9.5-6z"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11.2 12 4l8.5 7.2M6 9.6V20h4.5v-5.5h3V20H18V9.6"/></symbol>
@@ -365,36 +444,43 @@ body:not([data-view="home"]) .island{display:block}
     <p class="date" id="date"></p>
   </section>
 
-  <section class="side" aria-label="Rezepte und Videos">
-    <article class="card source" style="--accent:var(--green)">
-      <a class="row" id="ckHome" data-open="site" href="https://www.chefkoch.de/">
-        <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-fork"/></svg></span>
-        <span class="row-name">Chefkoch</span>
-        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-      </a>
-      <a class="idea" id="dishLink" data-open="site" href="#">
-        <span class="idea-text">
-          <span class="idea-label">Idee für heute</span>
-          <span class="idea-title" id="dishName"></span>
-        </span>
-        <span class="thumb" id="dishThumb"><svg class="i ph" aria-hidden="true"><use href="#i-fork"/></svg></span>
-      </a>
-    </article>
-
-    <article class="card source" style="--accent:var(--pink)">
-      <a class="row" id="ebHome" data-open="site" href="https://www.einfachbacken.de/">
-        <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-cake"/></svg></span>
-        <span class="row-name">Einfach Backen</span>
-        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-      </a>
-      <a class="idea" id="bakeLink" data-open="site" href="#">
-        <span class="idea-text">
-          <span class="idea-label">Idee für heute</span>
-          <span class="idea-title" id="bakeName"></span>
-        </span>
-        <span class="thumb" id="bakeThumb"><svg class="i ph" aria-hidden="true"><use href="#i-cake"/></svg></span>
-      </a>
-    </article>
+  <section class="side" aria-label="Rezepte, Videos und Musik">
+    <div class="stack-wrap">
+      <div class="stack-peek" aria-hidden="true"></div>
+      <article class="card stack" aria-label="Rezeptideen, zum Wechseln wischen">
+        <div class="stack-scroll" id="stackScroll">
+          <div class="stack-page source" style="--accent:var(--green)">
+            <a class="row" id="ckHome" data-open="site" href="https://www.chefkoch.de/">
+              <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-fork"/></svg></span>
+              <span class="row-name">Chefkoch</span>
+              <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <a class="idea" id="dishLink" data-open="site" href="#">
+              <span class="idea-text">
+                <span class="idea-label">Idee für heute</span>
+                <span class="idea-title" id="dishName"></span>
+              </span>
+              <span class="thumb" id="dishThumb"><svg class="i ph" aria-hidden="true"><use href="#i-fork"/></svg></span>
+            </a>
+          </div>
+          <div class="stack-page source" style="--accent:var(--pink)">
+            <a class="row" id="ebHome" data-open="site" href="https://www.einfachbacken.de/">
+              <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-cake"/></svg></span>
+              <span class="row-name">Einfach Backen</span>
+              <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+            </a>
+            <a class="idea" id="bakeLink" data-open="site" href="#">
+              <span class="idea-text">
+                <span class="idea-label">Idee für heute</span>
+                <span class="idea-title" id="bakeName"></span>
+              </span>
+              <span class="thumb" id="bakeThumb"><svg class="i ph" aria-hidden="true"><use href="#i-cake"/></svg></span>
+            </a>
+          </div>
+        </div>
+        <div class="stack-dots" id="stackDots" aria-hidden="true"><span class="on"></span><span></span></div>
+      </article>
+    </div>
 
     <article class="card source video" style="--accent:var(--red)">
       <a class="row" id="ytHome" data-open="video" href="https://www.youtube.com/@dailyceddo/videos">
@@ -413,23 +499,28 @@ body:not([data-view="home"]) .island{display:block}
         </span>
       </a>
     </article>
-  </section>
 
-  <section class="card timer" id="timer" data-status="idle" aria-label="Timer">
-    <div class="readout">
-      <span class="readout-time" id="tTime">10:00</span>
-      <span class="readout-state" id="tState">Zum Einstellen ziehen</span>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="slider" role="slider" tabindex="0" aria-label="Timerdauer in Minuten" aria-valuemin="1" aria-valuemax="45" aria-valuenow="10" aria-valuetext="10 Minuten">
-        <div class="fill" id="fill"></div>
+    <article class="card source spotify" id="spCard" data-sp="off" style="--accent:var(--spotify)">
+      <div class="row">
+        <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-music"/></svg></span>
+        <span class="row-name">Spotify</span>
+        <button class="sp-dev" id="spDevice" type="button">Gerät wählen</button>
       </div>
-      <div class="ticks" id="ticks" aria-hidden="true"></div>
-    </div>
-    <div class="actions">
-      <button class="round r-gray" id="btnCancel" type="button" disabled>Abbrechen</button>
-      <button class="round r-green" id="btnMain" type="button">Start</button>
-    </div>
+      <div class="idea sp-body">
+        <span class="sp-cover" id="spCover"><svg class="i" aria-hidden="true"><use href="#i-music"/></svg></span>
+        <span class="sp-meta">
+          <span class="sp-title" id="spTitle">Spotify</span>
+          <span class="sp-artist" id="spArtist"></span>
+          <span class="sp-bar"><i id="spProg"></i></span>
+        </span>
+        <span class="sp-ctrl">
+          <button class="sp-btn" id="spPrev" type="button" aria-label="Vorheriger Titel"><svg class="i"><use href="#i-prev"/></svg></button>
+          <button class="sp-btn sp-play" id="spPlay" type="button" aria-label="Wiedergabe starten oder pausieren"><svg class="i ic-play"><use href="#i-play"/></svg><svg class="i ic-pause"><use href="#i-pause"/></svg></button>
+          <button class="sp-btn" id="spNext" type="button" aria-label="Nächster Titel"><svg class="i"><use href="#i-next"/></svg></button>
+        </span>
+        <button class="sp-connect" id="spConnect" type="button">Verbinden</button>
+      </div>
+    </article>
   </section>
 </main>
 
@@ -446,7 +537,7 @@ body:not([data-view="home"]) .island{display:block}
 <!-- Unterseite: eingebettete Webseite (nur mit embedSites) -->
 <section class="sub" id="webView" aria-label="Rezept"></section>
 
-<!-- Unterseite: eigene Rezeptansicht (mit recipeProxy) -->
+<!-- Unterseite: eigene Rezeptansicht -->
 <section class="sub" id="recipeView" aria-label="Rezept">
   <div class="rv-side" id="rvSide">
     <div class="rv-img" id="rvImg"></div>
@@ -462,34 +553,54 @@ body:not([data-view="home"]) .island{display:block}
   <div class="rv-state" id="rvState" hidden></div>
 </section>
 
+<!-- Unterseite: Küchenhilfe -->
+<section class="sub" id="askView" data-state="idle" aria-label="Frage stellen">
+  <div class="ask-left">
+    <div class="ask-mic-wrap">
+      <span class="ask-ring r1" id="askR1"></span>
+      <span class="ask-ring r2" id="askR2"></span>
+      <button class="ask-mic" id="askMic" type="button" aria-label="Frage aufnehmen"><svg class="i"><use href="#i-mic"/></svg></button>
+    </div>
+    <div class="ask-status"><b id="askStatus">Tippe aufs Mikrofon</b><span id="askSub">und stell deine Frage</span></div>
+  </div>
+  <div class="ask-right" aria-live="polite">
+    <span class="ask-label" id="askLabel"></span>
+    <p class="ask-q" id="askQ"></p>
+    <p class="ask-a hint" id="askA">Frag zum Beispiel: „Wie lange muss ein Ei kochen, damit es wachsweich ist?“</p>
+  </div>
+</section>
+
 <a class="home-btn" id="homeBtn" href="./" aria-label="Zur Startseite"><svg class="i" viewBox="0 0 24 24"><use href="#i-home"/></svg></a>
 
-<!-- Timer-Insel -->
+<!-- Mikrofon + Timer -->
 <div class="island-scrim" id="islandScrim"></div>
-<div class="island" id="island" data-status="idle" aria-label="Timer">
-  <button class="island-pill" id="islandPill" type="button" aria-label="Timer öffnen">
-    <svg class="ring" viewBox="0 0 28 28" aria-hidden="true">
-      <g transform="rotate(-90 14 14)"><circle class="ring-bg" cx="14" cy="14" r="11"/><circle class="ring-fg" id="ringFg" cx="14" cy="14" r="11"/></g>
-      <path class="hands" d="M14 8.6V14l3.4 2.2"/>
-    </svg>
-    <span class="island-time" id="iTime">Timer</span>
-  </button>
-  <div class="island-panel">
-    <div class="ip-top">
-      <div class="ip-readout">
-        <span class="ip-time" id="iTimeBig">10:00</span>
-        <span class="ip-state" id="iState">Zum Einstellen ziehen</span>
+<div class="dock" id="dock">
+  <a class="mic-btn" id="micBtn" href="#frage" aria-label="Frage stellen"><svg class="i"><use href="#i-mic"/></svg></a>
+  <div class="island" id="island" data-status="idle" aria-label="Timer">
+    <button class="island-pill" id="islandPill" type="button" aria-label="Timer öffnen">
+      <svg class="ring" viewBox="0 0 28 28" aria-hidden="true">
+        <g transform="rotate(-90 14 14)"><circle class="ring-bg" cx="14" cy="14" r="11"/><circle class="ring-fg" id="ringFg" cx="14" cy="14" r="11"/></g>
+        <path class="hands" d="M14 8.6V14l3.4 2.2"/>
+      </svg>
+      <span class="island-time" id="iTime">Timer</span>
+    </button>
+    <div class="island-panel">
+      <div class="ip-top">
+        <div class="ip-readout">
+          <span class="ip-time" id="iTimeBig">10:00</span>
+          <span class="ip-state" id="iState">Zum Einstellen ziehen</span>
+        </div>
+        <div class="actions">
+          <button class="round r-gray" id="iCancel" type="button" disabled>Abbrechen</button>
+          <button class="round r-green" id="iMain" type="button">Start</button>
+        </div>
       </div>
-      <div class="actions">
-        <button class="round r-gray" id="iCancel" type="button" disabled>Abbrechen</button>
-        <button class="round r-green" id="iMain" type="button">Start</button>
+      <div class="slider-wrap">
+        <div class="slider" id="iSlider" role="slider" tabindex="0" aria-label="Timerdauer in Minuten" aria-valuemin="1" aria-valuemax="45" aria-valuenow="10" aria-valuetext="10 Minuten">
+          <div class="fill" id="iFill"></div>
+        </div>
+        <div class="ticks" id="iTicks" aria-hidden="true"></div>
       </div>
-    </div>
-    <div class="slider-wrap">
-      <div class="slider" id="iSlider" role="slider" tabindex="0" aria-label="Timerdauer in Minuten" aria-valuemin="1" aria-valuemax="45" aria-valuenow="10" aria-valuetext="10 Minuten">
-        <div class="fill" id="iFill"></div>
-      </div>
-      <div class="ticks" id="iTicks" aria-hidden="true"></div>
     </div>
   </div>
 </div>
@@ -504,12 +615,20 @@ body:not([data-view="home"]) .island{display:block}
 </div>
 <div class="overlay" id="confirm" hidden>
   <div class="sheet" role="alertdialog" aria-labelledby="cfTitle" aria-describedby="cfText">
-    <h2 id="cfTitle">Der Timer läuft</h2>
-    <p id="cfText">Die Seite öffnet sich im ganzen Fenster. Der Timer läuft weiter, klingeln kann er aber erst, wenn du zurück bist.</p>
+    <h2 id="cfTitle"></h2>
+    <p id="cfText"></p>
     <div class="sheet-actions">
-      <button class="btn-2" id="cfCancel" type="button">Hierbleiben</button>
-      <button class="btn-1" id="cfOk" type="button">Öffnen</button>
+      <button class="btn-2" id="cfCancel" type="button"></button>
+      <button class="btn-1" id="cfOk" type="button"></button>
     </div>
+  </div>
+</div>
+<div class="overlay" id="devSheet" hidden>
+  <div class="sheet" role="dialog" aria-labelledby="devTitle">
+    <h2 id="devTitle">Wiedergabe auf</h2>
+    <p id="devText">Spotify-Geräte in deinem Konto</p>
+    <div class="dev-list" id="devList"></div>
+    <button class="btn-2" id="devClose" type="button">Schließen</button>
   </div>
 </div>
 
@@ -538,8 +657,12 @@ body:not([data-view="home"]) .island{display:block}
     // Adresse des Cloudflare Workers (worker/worker.js), z. B. "https://kuechen-rezepte.NAME.workers.dev".
     // Gesetzt: Rezepte von Chefkoch und Einfach Backen öffnen in der eigenen Rezeptansicht.
     recipeProxy: "https://kuechen-rezepte.spam14.workers.dev/",
+    // Sprachfragen gehen an denselben Worker (Pfad /ask). Dort entscheidet sich auch das Modell.
+    assistantName: "Küchenhilfe",
+    // Client-ID der Spotify-App (developer.spotify.com). Leer: Spotify-Kachel zeigt einen Hinweis.
+    spotifyClientId: "5108cfc797084cdb95cec1900b5a9a84",
     steps: [1,2,3,4,5,6,7,8,9,10,12,15,20,25,30,35,40,45],
-    ticks: [1,5,10,15,20,30,45],
+    ticks: [1,5,10,20,30,45],
     defaultMinutes: 10,
     dishes: [
       "Käsespätzle","Linsen mit Spätzle","Gaisburger Marsch","Maultaschen in Brühe","Schupfnudeln mit Sauerkraut",
@@ -651,6 +774,103 @@ function tickClock(){
   setTimeout(tickClock, 1000 - (Date.now() % 1000) + 20);
 }
 
+/* ---------- Rezept-Stapel: Punkte folgen dem Wischen ---------- */
+(function(){
+  const sc = $("stackScroll"), dots = [...$("stackDots").children];
+  sc.addEventListener("scroll", () => {
+    const i = Math.round(sc.scrollTop / Math.max(1, sc.clientHeight));
+    dots.forEach((d, k) => d.classList.toggle("on", k === i));
+  }, { passive: true });
+})();
+
+/* ---------- Navigation: Startseite und Unterseiten ---------- */
+let view = "home", currentVideo = null;
+
+function parseHash(){
+  const h = location.hash.slice(1);
+  if (h.startsWith("video=")) return { view: "video", id: decodeURIComponent(h.slice(6)) };
+  if (h.startsWith("rezept=") && CONFIG.recipeProxy) return { view: "recipe", url: decodeURIComponent(h.slice(7)) };
+  if (h.startsWith("web=") && CONFIG.embedSites) return { view: "web", url: decodeURIComponent(h.slice(4)) };
+  if (h === "frage") return { view: "ask" };
+  return { view: "home" };
+}
+const hashOf = r => r.view === "video" ? "#video=" + encodeURIComponent(r.id)
+                  : r.view === "recipe" ? "#rezept=" + encodeURIComponent(r.url)
+                  : r.view === "web" ? "#web=" + encodeURIComponent(r.url)
+                  : r.view === "ask" ? "#frage" : "";
+
+function go(r, replace){
+  history[replace ? "replaceState" : "pushState"]({ kd: true }, "", hashOf(r) || location.pathname + location.search);
+  show(r);
+}
+function home(){
+  if (history.state && history.state.kd) history.back();
+  else { history.replaceState(null, "", location.pathname + location.search); show({ view: "home" }); }
+}
+function show(r){
+  const apply = () => applyRoute(r);
+  if (r.view !== view && document.startViewTransition && !reduceMotion) document.startViewTransition(apply);
+  else apply();
+}
+function applyRoute(r){
+  if (view === "ask" && r.view !== "ask") stopListening(true);
+  view = r.view;
+  document.body.dataset.view = view;
+  closeIsland();
+  if (view === "video") openVideo(r.id);
+  else if (currentVideo){ destroyPlayer(); currentVideo = null; }
+  if (view === "recipe") openRecipe(r.url); else currentRecipe = null;
+  const web = $("webView");
+  if (view === "web"){ if (web.dataset.url !== r.url){ mountFrame(web, r.url, "Rezept"); web.dataset.url = r.url; } }
+  else if (web.dataset.url){ mountFrame(web, null); web.dataset.url = ""; }
+  if (view === "home") spPoll();
+}
+/* iframes immer neu erzeugen statt src zu ändern: sonst landen ihre Seitenwechsel
+   im Verlauf und die Zurück-Geste springt im Video statt zur Startseite */
+function mountFrame(box, src, title){
+  if (!src){ box.replaceChildren(); return; }
+  const f = document.createElement("iframe");
+  f.title = title || "";
+  f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+  f.allowFullscreen = true;
+  f.referrerPolicy = "strict-origin-when-cross-origin";
+  f.src = src;
+  box.replaceChildren(f);
+}
+window.addEventListener("popstate", () => show(parseHash()));
+
+/* Links abfangen: nie Pop-ups, Videos und Rezepte im Display */
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[data-open]");
+  if (!a) return;
+  e.preventDefault();
+  if (a.dataset.open === "video" && a.dataset.video) go({ view: "video", id: a.dataset.video });
+  else if (a.dataset.open === "site" && CONFIG.recipeProxy && isRecipeUrl(a.href)) go({ view: "recipe", url: a.href });
+  else if (a.dataset.open === "site" && CONFIG.embedSites) go({ view: "web", url: a.href });
+  else leave(a.href);
+});
+$("homeBtn").addEventListener("click", e => { e.preventDefault(); home(); });
+$("micBtn").addEventListener("click", e => {
+  e.preventDefault();
+  if (view === "ask") return;
+  go({ view: "ask" }, view !== "home");
+  startListening();
+});
+
+function leave(url){
+  if (state.status !== "running") { location.assign(url); return; }
+  confirmSheet("Der Timer läuft",
+    "Die Seite öffnet sich im ganzen Fenster. Der Timer läuft weiter, klingeln kann er aber erst, wenn du zurück bist.",
+    "Öffnen", "Hierbleiben", () => location.assign(url));
+}
+function confirmSheet(title, text, okLabel, cancelLabel, onOk){
+  $("cfTitle").textContent = title; $("cfText").textContent = text;
+  $("cfOk").textContent = okLabel; $("cfCancel").textContent = cancelLabel;
+  $("confirm").hidden = false;
+  $("cfOk").onclick = () => { $("confirm").hidden = true; onOk(); };
+  $("cfCancel").onclick = () => { $("confirm").hidden = true; };
+}
+
 /* ---------- Ideen des Tages ---------- */
 function renderIdeas(){
   const now = new Date();
@@ -694,84 +914,6 @@ function renderVideo(){
     delete $("ytHome").dataset.video;
     setThumb($("videoThumb"), null);
   }
-}
-
-/* ---------- Navigation: Startseite und Unterseiten ---------- */
-let view = "home", currentVideo = null;
-
-function parseHash(){
-  const h = location.hash.slice(1);
-  if (h.startsWith("video=")) return { view: "video", id: decodeURIComponent(h.slice(6)) };
-  if (h.startsWith("rezept=") && CONFIG.recipeProxy) return { view: "recipe", url: decodeURIComponent(h.slice(7)) };
-  if (h.startsWith("web=") && CONFIG.embedSites) return { view: "web", url: decodeURIComponent(h.slice(4)) };
-  return { view: "home" };
-}
-const hashOf = r => r.view === "video" ? "#video=" + encodeURIComponent(r.id)
-                  : r.view === "recipe" ? "#rezept=" + encodeURIComponent(r.url)
-                  : r.view === "web" ? "#web=" + encodeURIComponent(r.url) : "";
-
-function go(r, replace){
-  history[replace ? "replaceState" : "pushState"]({ kd: true }, "", hashOf(r) || location.pathname + location.search);
-  show(r);
-}
-function home(){
-  if (history.state && history.state.kd) history.back();
-  else { history.replaceState(null, "", location.pathname + location.search); show({ view: "home" }); }
-}
-function show(r){
-  const apply = () => applyRoute(r);
-  if (r.view !== view && document.startViewTransition && !reduceMotion) document.startViewTransition(apply);
-  else apply();
-}
-function applyRoute(r){
-  view = r.view;
-  document.body.dataset.view = view;
-  closeIsland();
-  if (view === "video") openVideo(r.id);
-  else if (currentVideo){ mountFrame($("player"), null); currentVideo = null; }
-  if (view === "recipe") openRecipe(r.url); else currentRecipe = null;
-  const web = $("webView");
-  if (view === "web"){ if (web.dataset.url !== r.url){ mountFrame(web, r.url, "Rezept"); web.dataset.url = r.url; } }
-  else if (web.dataset.url){ mountFrame(web, null); web.dataset.url = ""; }
-}
-/* iframes immer neu erzeugen statt src zu ändern: sonst landen ihre Seitenwechsel
-   im Verlauf und die Zurück-Geste springt im Video statt zur Startseite */
-function mountFrame(box, src, title){
-  if (!src){ box.replaceChildren(); return; }
-  const f = document.createElement("iframe");
-  f.title = title || "";
-  f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
-  f.allowFullscreen = true;
-  f.referrerPolicy = "strict-origin-when-cross-origin";
-  f.src = src;
-  box.replaceChildren(f);
-}
-window.addEventListener("popstate", () => show(parseHash()));
-
-/* Links abfangen: nie Pop-ups, Videos im Display, Rezepte je nach embedSites */
-document.addEventListener("click", e => {
-  const a = e.target.closest("a[data-open]");
-  if (!a) return;
-  e.preventDefault();
-  if (a.dataset.open === "video" && a.dataset.video) go({ view: "video", id: a.dataset.video });
-  else if (a.dataset.open === "site" && CONFIG.recipeProxy && isRecipeUrl(a.href)) go({ view: "recipe", url: a.href });
-  else if (a.dataset.open === "site" && CONFIG.embedSites) go({ view: "web", url: a.href });
-  else leave(a.href);
-});
-$("homeBtn").addEventListener("click", e => { e.preventDefault(); home(); });
-
-function leave(url){
-  if (state.status !== "running") { location.assign(url); return; }
-  confirmSheet("Der Timer läuft",
-    "Die Seite öffnet sich im ganzen Fenster. Der Timer läuft weiter, klingeln kann er aber erst, wenn du zurück bist.",
-    "Öffnen", "Hierbleiben", () => location.assign(url));
-}
-function confirmSheet(title, text, okLabel, cancelLabel, onOk){
-  $("cfTitle").textContent = title; $("cfText").textContent = text;
-  $("cfOk").textContent = okLabel; $("cfCancel").textContent = cancelLabel;
-  $("confirm").hidden = false;
-  $("cfOk").onclick = () => { $("confirm").hidden = true; onOk(); };
-  $("cfCancel").onclick = () => { $("confirm").hidden = true; };
 }
 
 /* ---------- Rezeptansicht ---------- */
@@ -902,11 +1044,48 @@ function renderRecipe(d){
 }
 
 /* ---------- Video-Unterseite ---------- */
+/* YouTube über die IFrame-API: immer mit Ton und ohne Untertitel starten */
+let ytPlayer = null, ytApi = null;
+function loadYouTubeApi(){
+  if (ytApi) return ytApi;
+  ytApi = new Promise(resolve => {
+    if (window.YT && window.YT.Player) return resolve(window.YT);
+    window.onYouTubeIframeAPIReady = () => resolve(window.YT);
+    const s = document.createElement("script");
+    s.src = "https://www.youtube.com/iframe_api"; s.async = true;
+    document.head.append(s);
+  });
+  return ytApi;
+}
+function noCaptions(p){
+  try { p.unloadModule("captions"); } catch(e){}
+  try { p.unloadModule("cc"); } catch(e){}
+}
+async function playVideo(id){
+  destroyPlayer();
+  const box = document.createElement("div");
+  $("player").replaceChildren(box);
+  const YT = await loadYouTubeApi();
+  if (currentVideo !== id) return;
+  ytPlayer = new YT.Player(box, {
+    host: "https://www.youtube-nocookie.com",
+    videoId: id,
+    playerVars: { autoplay: 1, playsinline: 1, rel: 0, cc_load_policy: 0, iv_load_policy: 3, hl: "de" },
+    events: {
+      onReady: e => { noCaptions(e.target); e.target.unMute(); e.target.setVolume(100); e.target.playVideo(); },
+      onStateChange: e => { if (e.data === 1) { noCaptions(e.target); if (e.target.isMuted()) e.target.unMute(); } }
+    }
+  });
+}
+function destroyPlayer(){
+  if (ytPlayer){ try { ytPlayer.destroy(); } catch(e){} ytPlayer = null; }
+  $("player").replaceChildren();
+}
 function openVideo(id){
   const v = videoList().find(x => x.id === id) || { id, title: "", published: null };
   if (currentVideo !== id){
     currentVideo = id;
-    mountFrame($("player"), "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&playsinline=1&rel=0", "YouTube-Video");
+    playVideo(id);
   }
   $("vvTitle").textContent = v.title || "";
   $("vvMeta").textContent = "Daily Ceddo" + (v.published ? ", " + relTime(v.published) : "");
@@ -935,11 +1114,8 @@ function renderVideoList(){
 const P = [0, ...CONFIG.steps];          // Index 0 = linker Rand (0 min)
 const LAST = P.length - 1;
 const RING = 2 * Math.PI * 11;
-const timerEl = $("timer"), islandEl = $("island");
-const sliders = [$("slider"), $("iSlider")];
-const fills = [$("fill"), $("iFill")];
-const mains = [$("btnMain"), $("iMain")];
-const cancels = [$("btnCancel"), $("iCancel")];
+const islandEl = $("island");
+const slider = $("iSlider"), fill = $("iFill"), btnMain = $("iMain"), btnCancel = $("iCancel");
 let state = { status:"idle", idx: Math.max(1, P.indexOf(CONFIG.defaultMinutes)), totalMs:0, endAt:0, remainingMs:0 };
 let raf = 0, wakeLock = null, audioCtx = null, alarmLoop = 0, alarmCap = 0, collapseT = 0;
 
@@ -951,10 +1127,7 @@ function posFor(min){
   }
   return 1;
 }
-function setFill(p){
-  const t = "translateX(" + ((p - 1) * 100).toFixed(3) + "%)";
-  fills.forEach(f => { f.style.transform = t; });
-}
+const setFill = p => { fill.style.transform = "translateX(" + ((p - 1) * 100).toFixed(3) + "%)"; };
 function setRing(frac){
   $("ringFg").style.strokeDashoffset = (RING * (1 - Math.max(0, Math.min(1, frac)))).toFixed(2);
 }
@@ -963,23 +1136,20 @@ function fmt(ms){
   return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
 }
 function setTexts(big, st, pill){
-  $("tTime").textContent = big; $("iTimeBig").textContent = big;
-  if (st !== null){ $("tState").textContent = st; $("iState").textContent = st; }
+  $("iTimeBig").textContent = big;
+  if (st !== null) $("iState").textContent = st;
   $("iTime").textContent = pill;
 }
 
 function render(){
-  timerEl.dataset.status = islandEl.dataset.status = state.status;
+  islandEl.dataset.status = state.status;
   const minutes = P[state.idx];
-  sliders.forEach(s => {
-    s.setAttribute("aria-valuenow", minutes);
-    s.setAttribute("aria-valuetext", minutes + (minutes === 1 ? " Minute" : " Minuten"));
-  });
-  cancels.forEach(b => { b.disabled = state.status === "idle"; });
-  mains.forEach(b => {
-    b.className = "round " + (state.status === "running" ? "r-orange" : "r-green");
-    b.textContent = state.status === "running" ? "Pause" : state.status === "paused" ? "Weiter" : "Start";
-  });
+  slider.setAttribute("aria-valuenow", minutes);
+  slider.setAttribute("aria-valuetext", minutes + (minutes === 1 ? " Minute" : " Minuten"));
+  btnCancel.disabled = state.status === "idle";
+  btnMain.className = "round " + (state.status === "running" ? "r-orange" : "r-green");
+  btnMain.textContent = state.status === "running" ? "Pause" : state.status === "paused" ? "Weiter" : "Start";
+  $("islandPill").setAttribute("aria-label", state.status === "idle" ? "Timer öffnen" : "Timer öffnen, " + $("iTime").textContent);
   if (state.status === "idle"){
     setFill(posFor(minutes)); setRing(0);
     setTexts(fmt(minutes * 60000), "Zum Einstellen ziehen", "Timer");
@@ -999,13 +1169,12 @@ function frame(){
   setFill(posFor(rem / 60000));
   setRing(rem / state.totalMs);
   const txt = fmt(rem);
-  if ($("tTime").textContent !== txt) setTexts(txt, null, txt);
+  if ($("iTime").textContent !== txt) setTexts(txt, null, txt);
   raf = requestAnimationFrame(frame);
 }
 function loop(){
   cancelAnimationFrame(raf);
-  const st = "Fertig um " + timeFmt.format(new Date(state.endAt));
-  $("tState").textContent = st; $("iState").textContent = st;
+  $("iState").textContent = "Fertig um " + timeFmt.format(new Date(state.endAt));
   raf = requestAnimationFrame(frame);
 }
 function save(){ store.set("kd.timer", state); }
@@ -1023,7 +1192,7 @@ function start(){
   state.status = "running";
   render(); save(); loop(); keepAwake(true);
 }
-/* Timer mit beliebiger Dauer starten (aus Zeitangaben im Rezept) */
+/* Timer mit beliebiger Dauer starten (aus Zeitangaben in Rezept oder Antwort) */
 function startFor(minutes, label){
   const run = () => {
     unlockAudio();
@@ -1072,47 +1241,42 @@ function stopAlarm(){
   cancel(); closeIsland();
 }
 
-mains.forEach(b => b.addEventListener("click", () => {
+btnMain.addEventListener("click", () => {
   if (state.status === "running") pause();
   else if (state.status === "paused") resume();
-  else { start(); if (islandEl.classList.contains("open")) { clearTimeout(collapseT); collapseT = setTimeout(closeIsland, 700); } }
-}));
-cancels.forEach(b => b.addEventListener("click", cancel));
+  else { start(); clearTimeout(collapseT); collapseT = setTimeout(closeIsland, 700); }
+});
+btnCancel.addEventListener("click", cancel);
 $("btnStop").addEventListener("click", stopAlarm);
 
-/* Timer-Insel auf Unterseiten: antippen zum Aufklappen, daneben tippen zum Einklappen */
-function openIsland(){ clearTimeout(collapseT); islandEl.classList.add("open"); $("islandScrim").classList.add("on"); }
-function closeIsland(){ clearTimeout(collapseT); islandEl.classList.remove("open"); $("islandScrim").classList.remove("on"); }
+/* Timer-Pille: antippen klappt auf, daneben tippen klappt ein */
+function openIsland(){ clearTimeout(collapseT); islandEl.classList.add("open"); $("islandScrim").classList.add("on"); document.body.classList.add("timer-open"); }
+function closeIsland(){ clearTimeout(collapseT); islandEl.classList.remove("open"); $("islandScrim").classList.remove("on"); document.body.classList.remove("timer-open"); }
 $("islandPill").addEventListener("click", openIsland);
 $("islandScrim").addEventListener("click", closeIsland);
 
-/* Slider: Ziehen und Tippen (gilt für beide Slider) */
-function bindSlider(el){
+/* Slider: Ziehen und Tippen */
+(function(){
   let dragging = false;
   const fromPointer = e => {
-    const r = el.getBoundingClientRect();
+    const r = slider.getBoundingClientRect();
     setIdx(Math.round(((e.clientX - r.left) / r.width) * LAST));
   };
-  el.addEventListener("pointerdown", e => {
+  slider.addEventListener("pointerdown", e => {
     if (state.status !== "idle") return;
-    dragging = true; el.classList.add("dragging");
-    el.setPointerCapture(e.pointerId); fromPointer(e);
+    dragging = true; slider.classList.add("dragging");
+    slider.setPointerCapture(e.pointerId); fromPointer(e);
   });
-  el.addEventListener("pointermove", e => { if (dragging) fromPointer(e); });
-  const end = () => { dragging = false; el.classList.remove("dragging"); };
-  el.addEventListener("pointerup", end);
-  el.addEventListener("pointercancel", end);
-  el.addEventListener("keydown", e => {
+  slider.addEventListener("pointermove", e => { if (dragging) fromPointer(e); });
+  const end = () => { dragging = false; slider.classList.remove("dragging"); };
+  slider.addEventListener("pointerup", end);
+  slider.addEventListener("pointercancel", end);
+  slider.addEventListener("keydown", e => {
     if (state.status !== "idle") return;
     if (e.key === "ArrowRight" || e.key === "ArrowUp"){ setIdx(state.idx + 1); e.preventDefault(); }
     if (e.key === "ArrowLeft" || e.key === "ArrowDown"){ setIdx(state.idx - 1); e.preventDefault(); }
   });
-}
-sliders.forEach(bindSlider);
-
-/* Skalen */
-["ticks", "iTicks"].forEach(id => {
-  const box = $(id);
+  const box = $("iTicks");
   CONFIG.ticks.forEach((m, k) => {
     const t = document.createElement("span");
     t.className = "tick" + (k === CONFIG.ticks.length - 1 ? " last" : "");
@@ -1120,7 +1284,7 @@ sliders.forEach(bindSlider);
     t.textContent = m;
     box.appendChild(t);
   });
-});
+})();
 
 /* Ton */
 function unlockAudio(){
@@ -1157,6 +1321,280 @@ async function keepAwake(on){
   } catch(e){ wakeLock = null; }
 }
 
+/* ---------- Spotify (Steuerung über die Web API, Wiedergabe auf einem Connect-Gerät) ---------- */
+const SP_SCOPES = "user-read-playback-state user-modify-playback-state user-read-currently-playing";
+const SP_REDIRECT = location.origin + location.pathname.replace(/index\.html$/, "");
+const SP = { token: store.get("kd.sp"), state: null, note: "", noteT: 0 };
+const b64url = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+
+async function spLogin(){
+  if (!CONFIG.spotifyClientId) return;
+  const verifier = b64url(crypto.getRandomValues(new Uint8Array(48)));
+  const challenge = b64url(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
+  store.set("kd.sp.verifier", verifier);
+  const q = new URLSearchParams({ response_type: "code", client_id: CONFIG.spotifyClientId, scope: SP_SCOPES,
+    redirect_uri: SP_REDIRECT, code_challenge_method: "S256", code_challenge: challenge });
+  location.assign("https://accounts.spotify.com/authorize?" + q);
+}
+function spSaveToken(d){
+  SP.token = { access: d.access_token, refresh: d.refresh_token || (SP.token && SP.token.refresh), exp: Date.now() + (d.expires_in || 3600) * 1000 };
+  store.set("kd.sp", SP.token);
+}
+async function spTokenRequest(params){
+  const r = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(Object.assign({ client_id: CONFIG.spotifyClientId }, params))
+  });
+  if (!r.ok) throw new Error("token " + r.status);
+  spSaveToken(await r.json());
+}
+async function spHandleRedirect(){
+  const p = new URLSearchParams(location.search);
+  if (!p.has("code") && !p.has("error")) return;
+  history.replaceState(null, "", SP_REDIRECT + location.hash);
+  if (!p.get("code") || !CONFIG.spotifyClientId) return;
+  try {
+    await spTokenRequest({ grant_type: "authorization_code", code: p.get("code"), redirect_uri: SP_REDIRECT, code_verifier: store.get("kd.sp.verifier") || "" });
+  } catch(e){ spNote("Anmeldung bei Spotify fehlgeschlagen"); }
+}
+async function spToken(){
+  if (!SP.token) return null;
+  if (Date.now() < SP.token.exp - 60000) return SP.token.access;
+  try { await spTokenRequest({ grant_type: "refresh_token", refresh_token: SP.token.refresh }); }
+  catch(e){ if (/ 400$/.test(e.message)) { SP.token = null; store.set("kd.sp", null); } return null; }
+  return SP.token.access;
+}
+async function spApi(method, path, body, retry = true){
+  const t = await spToken();
+  if (!t) throw new Error("login");
+  const r = await fetch("https://api.spotify.com/v1" + path, {
+    method, headers: Object.assign({ Authorization: "Bearer " + t }, body ? { "Content-Type": "application/json" } : {}),
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (r.status === 401 && retry){ SP.token.exp = 0; return spApi(method, path, body, false); }
+  if (r.status === 204 || r.status === 202) return null;
+  if (!r.ok) throw new Error("spotify " + r.status);
+  const txt = await r.text();
+  return txt ? JSON.parse(txt) : null;
+}
+function spNote(text){
+  SP.note = text; clearTimeout(SP.noteT);
+  SP.noteT = setTimeout(() => { SP.note = ""; renderSpotify(); }, 6000);
+  renderSpotify();
+}
+
+async function spPoll(){
+  if (!SP.token) { renderSpotify(); return; }
+  try { SP.state = await spApi("GET", "/me/player"); if (SP.state) SP.state._at = Date.now(); }
+  catch(e){ if (e.message === "login") SP.token = null; }
+  renderSpotify();
+}
+
+function renderSpotify(){
+  const card = $("spCard");
+  const set = (title, artist) => { $("spTitle").textContent = title; $("spArtist").textContent = SP.note || artist; };
+  if (!CONFIG.spotifyClientId){ card.dataset.sp = "off"; set("Spotify einrichten", "Client-ID fehlt in der Konfiguration"); setThumb($("spCover"), null); return; }
+  if (!SP.token){ card.dataset.sp = "login"; set("Spotify", "Mit deinem Konto verbinden"); setThumb($("spCover"), null); return; }
+  const s = SP.state, item = s && s.item;
+  $("spDevice").textContent = (s && s.device && s.device.name) || store.get("kd.sp.device") || "Gerät wählen";
+  if (!item){
+    card.dataset.sp = "idle"; set("Gerade läuft nichts", "Play setzt die letzte Wiedergabe fort");
+    $("spProg").style.width = "0"; setThumb($("spCover"), null); return;
+  }
+  card.dataset.sp = s.is_playing ? "playing" : "paused";
+  const artist = (item.artists || []).map(a => a.name).join(", ") || (item.show && item.show.name) || "";
+  set(item.name, artist);
+  const imgs = (item.album && item.album.images) || item.images || [];
+  setThumb($("spCover"), (imgs[1] || imgs[0] || {}).url || null);
+  spProgress();
+}
+function spProgress(){
+  const s = SP.state;
+  if (!s || !s.item || !s.item.duration_ms) return;
+  const pos = s.progress_ms + (s.is_playing ? Date.now() - s._at : 0);
+  $("spProg").style.width = Math.min(100, pos / s.item.duration_ms * 100).toFixed(2) + "%";
+}
+
+async function spDevices(){
+  const d = await spApi("GET", "/me/player/devices");
+  return (d && d.devices) || [];
+}
+async function spPlayPause(){
+  if (!SP.token) return spLogin();
+  const s = SP.state;
+  try {
+    if (s && s.is_playing){
+      s.is_playing = false; s.progress_ms += Date.now() - s._at; s._at = Date.now(); renderSpotify();
+      await spApi("PUT", "/me/player/pause");
+    } else if (s && s.device){
+      if (s.item){ s.is_playing = true; s._at = Date.now(); renderSpotify(); }
+      await spApi("PUT", "/me/player/play");
+    } else {
+      const list = await spDevices();
+      const pref = store.get("kd.sp.device");
+      const dev = list.find(x => x.name === pref) || list.find(x => x.is_active) || list[0];
+      if (!dev){ spNote("Kein Spotify-Gerät gefunden. Echo oder Spotify-App einschalten."); return; }
+      await spApi("PUT", "/me/player", { device_ids: [dev.id], play: true });
+    }
+  } catch(e){ spNote("Spotify hat nicht reagiert"); }
+  setTimeout(spPoll, 800);
+}
+async function spSkip(dir){
+  try { await spApi("POST", "/me/player/" + dir); } catch(e){ spNote("Spotify hat nicht reagiert"); }
+  setTimeout(spPoll, 700);
+}
+async function spOpenDevices(){
+  $("devSheet").hidden = false;
+  $("devList").replaceChildren(el("p", null, "Suche Geräte …"));
+  try {
+    const list = await spDevices();
+    if (!list.length){ $("devList").replaceChildren(el("p", null, "Keine Geräte gefunden. Echo oder Spotify-App einschalten.")); return; }
+    $("devList").replaceChildren(...list.map(d => {
+      const b = el("button", "dev-item"); b.type = "button";
+      if (d.is_active) b.setAttribute("aria-current", "true");
+      b.append(el("span", null, d.name), el("small", null, d.type === "Speaker" ? "Lautsprecher" : d.type === "Tablet" ? "Tablet" : d.type === "Smartphone" ? "Handy" : d.type));
+      b.addEventListener("click", async () => {
+        store.set("kd.sp.device", d.name);
+        $("devSheet").hidden = true;
+        try { await spApi("PUT", "/me/player", { device_ids: [d.id], play: !!(SP.state && SP.state.is_playing) }); }
+        catch(e){ spNote("Gerätewechsel hat nicht geklappt"); }
+        setTimeout(spPoll, 800);
+      });
+      return b;
+    }));
+  } catch(e){ $("devList").replaceChildren(el("p", null, "Spotify hat nicht reagiert.")); }
+}
+$("spPlay").addEventListener("click", spPlayPause);
+$("spPrev").addEventListener("click", () => spSkip("previous"));
+$("spNext").addEventListener("click", () => spSkip("next"));
+$("spConnect").addEventListener("click", spLogin);
+$("spDevice").addEventListener("click", spOpenDevices);
+$("devClose").addEventListener("click", () => { $("devSheet").hidden = true; });
+setInterval(() => { if (document.visibilityState === "visible" && view === "home" && SP.token) spPoll(); }, 5000);
+setInterval(() => { if (SP.state && SP.state.is_playing && view === "home") spProgress(); }, 1000);
+
+/* ---------- Küchenhilfe: Frage sprechen, Antwort lesen ---------- */
+const ASK_URL = CONFIG.recipeProxy ? new URL("ask", CONFIG.recipeProxy).href : "";
+const ask = { rec: null, stream: null, chunks: [], discard: false, ctx: null };
+
+function askState(st, title, sub){
+  $("askView").dataset.state = st;
+  $("askStatus").textContent = title;
+  $("askSub").textContent = sub || "";
+}
+function askLevel(v){
+  if (!v){ $("askR1").style.transform = $("askR2").style.transform = ""; return; }
+  const s = 1 + Math.min(0.22, v * 2.2);
+  $("askR1").style.transform = "scale(" + s.toFixed(3) + ")";
+  $("askR2").style.transform = "scale(" + (1 + (s - 1) * 0.6).toFixed(3) + ")";
+}
+
+async function startListening(){
+  if (ask.rec) return;
+  if (!ASK_URL){ askState("idle", "Nicht eingerichtet", "recipeProxy fehlt in der Konfiguration"); return; }
+  if (!navigator.mediaDevices || !window.MediaRecorder){
+    askState("idle", "Kein Mikrofon verfügbar", "Dieser Browser erlaubt keine Aufnahme"); return;
+  }
+  askState("listening", "Ich höre zu", "Tippen zum Beenden");
+  try {
+    ask.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+  } catch(e){
+    askState("idle", "Kein Zugriff aufs Mikrofon", "In Fully: Web Content Settings → Enable Microphone Access");
+    return;
+  }
+  if (view !== "ask"){ stopListening(true); return; }
+  const mime = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"]
+    .find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || "";
+  ask.chunks = []; ask.discard = false;
+  ask.rec = new MediaRecorder(ask.stream, mime ? { mimeType: mime } : undefined);
+  ask.rec.ondataavailable = e => { if (e.data && e.data.size) ask.chunks.push(e.data); };
+  ask.rec.onstop = onRecordingDone;
+  ask.rec.start(250);
+
+  // Ende der Frage an der Stille erkennen
+  try {
+    ask.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const an = ask.ctx.createAnalyser(); an.fftSize = 1024;
+    ask.ctx.createMediaStreamSource(ask.stream).connect(an);
+    const buf = new Uint8Array(an.fftSize);
+    const t0 = performance.now(); let spoke = false, quiet = t0;
+    const check = () => {
+      if (!ask.rec || ask.rec.state !== "recording") return;
+      an.getByteTimeDomainData(buf);
+      let sum = 0; for (const v of buf){ const x = (v - 128) / 128; sum += x * x; }
+      const rms = Math.sqrt(sum / buf.length), now = performance.now();
+      askLevel(rms);
+      if (rms > 0.035){ spoke = true; quiet = now; }
+      if ((spoke && now - quiet > 1500) || now - t0 > 20000 || (!spoke && now - t0 > 8000)) stopListening(false);
+      else requestAnimationFrame(check);
+    };
+    requestAnimationFrame(check);
+  } catch(e){ setTimeout(() => stopListening(false), 8000); }
+}
+
+function stopListening(discard){
+  ask.discard = !!discard;
+  if (ask.rec && ask.rec.state === "recording") ask.rec.stop();
+  else if (discard) ask.rec = null;
+  if (ask.stream){ ask.stream.getTracks().forEach(t => t.stop()); ask.stream = null; }
+  if (ask.ctx){ ask.ctx.close().catch(() => {}); ask.ctx = null; }
+  askLevel(0);
+}
+
+async function onRecordingDone(){
+  const type = (ask.rec && ask.rec.mimeType) || "audio/webm";
+  const blob = new Blob(ask.chunks, { type });
+  ask.rec = null;
+  if (ask.discard){ askState("idle", "Tippe aufs Mikrofon", "und stell deine Frage"); return; }
+  if (blob.size < 3000){ askState("idle", "Nichts gehört", "Tippe aufs Mikrofon und frag nochmal"); return; }
+  askState("thinking", "Einen Moment …", "");
+  try {
+    const r = await fetch(ASK_URL, { method: "POST", headers: { "Content-Type": type }, body: blob });
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 422){ askState("idle", "Nicht verstanden", "Tippe aufs Mikrofon und frag nochmal"); return; }
+    if (!r.ok || !d.answer) throw new Error(d.error || r.status);
+    showAnswer(d.question, d.answer);
+    askState("idle", "Noch eine Frage?", "Tippe aufs Mikrofon");
+  } catch(e){
+    askState("idle", "Das hat nicht geklappt", "Tippe aufs Mikrofon und versuch es nochmal");
+  }
+}
+
+/* Text mit antippbaren Zeitangaben (startet den Timer) */
+function appendTimeText(box, text){
+  let last = 0;
+  for (const m of text.matchAll(TIME_RE)){
+    box.append(text.slice(last, m.index));
+    const val = parseFloat(m[1].replace(",", "."));
+    const minutes = /^st/i.test(m[3]) ? val * 60 : val;
+    const b = el("button", "tchip"); b.type = "button";
+    b.append(svgUse("i-clock"), m[0]);
+    b.addEventListener("click", e => { e.stopPropagation(); startFor(minutes, m[0]); });
+    box.append(b);
+    last = m.index + m[0].length;
+  }
+  box.append(text.slice(last));
+}
+function showAnswer(question, answer){
+  $("askLabel").textContent = CONFIG.assistantName || "";
+  $("askQ").textContent = "„" + question + "“";
+  const a = $("askA"); a.classList.remove("hint"); a.replaceChildren();
+  appendTimeText(a, answer);
+}
+$("askMic").addEventListener("click", () => {
+  const st = $("askView").dataset.state;
+  if (st === "listening") stopListening(false);
+  else if (st !== "thinking") startListening();
+});
+
+/* Bildschirm wach halten, solange der Timer läuft */
+async function keepAwake(on){
+  try {
+    if (on && "wakeLock" in navigator && !wakeLock) wakeLock = await navigator.wakeLock.request("screen");
+    if (!on && wakeLock){ await wakeLock.release(); wakeLock = null; }
+  } catch(e){ wakeLock = null; }
+}
+
 /* Weiterlaufen nach Seitenwechsel, Zurück-Geste oder Neuladen */
 function resumeIfNeeded(){
   if (state.status === "running"){
@@ -1165,8 +1603,8 @@ function resumeIfNeeded(){
   }
 }
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState !== "visible") return;
-  loadFeed(); resumeIfNeeded();
+  if (document.visibilityState !== "visible") { if (view === "ask") stopListening(true); return; }
+  loadFeed(); resumeIfNeeded(); if (view === "home") spPoll();
 });
 window.addEventListener("pageshow", e => { if (e.persisted) { loadFeed(); resumeIfNeeded(); } });
 setInterval(() => { if (state.status === "running" && Date.now() >= state.endAt) finish(); }, 1000);
@@ -1184,10 +1622,16 @@ setInterval(() => { if (state.status === "running" && Date.now() >= state.endAt)
   if (state.status === "running") loop();
 })();
 
-applyRoute(parseHash());
-tickClock();
-loadFeed();
-setInterval(loadFeed, CONFIG.feedRefreshMinutes * 60 * 1000);
+(async function init(){
+  await spHandleRedirect();
+  const first = parseHash();
+  applyRoute(first.view === "ask" ? { view: "home" } : first);   // Aufnahme nur nach Antippen
+  if (first.view === "ask") history.replaceState(null, "", location.pathname + location.search);
+  tickClock();
+  loadFeed();
+  renderSpotify(); spPoll();
+  setInterval(loadFeed, CONFIG.feedRefreshMinutes * 60 * 1000);
+})();
 </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T23:02:35.564Z",
+  "updated": "2026-11-20T13:30:39.703Z",
   "days": {
     "2026-11-20": {
       "dish": {
@@ -27,13 +27,20 @@
     }
   },
   "video": {
-    "id": "djlGiJuEx_8",
-    "title": "1 STUNDE KOMISCHER SOHN BEI SCHWIEGERTOCHTER GESUCHT!",
-    "url": "https://www.youtube.com/watch?v=djlGiJuEx_8",
-    "image": "https://i.ytimg.com/vi/djlGiJuEx_8/mqdefault.jpg",
-    "published": "2026-11-19T17:00:07+00:00"
+    "id": "L4pawZF-IcM",
+    "title": "NEIN DANKE! ER WILL SIE IN DER FOTOBOX HOCH HEBEN! 😳 First Dates 💔",
+    "url": "https://www.youtube.com/watch?v=L4pawZF-IcM",
+    "image": "https://i.ytimg.com/vi/L4pawZF-IcM/mqdefault.jpg",
+    "published": "2026-11-20T13:00:33+00:00"
   },
   "videos": [
+    {
+      "id": "L4pawZF-IcM",
+      "title": "NEIN DANKE! ER WILL SIE IN DER FOTOBOX HOCH HEBEN! 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=L4pawZF-IcM",
+      "image": "https://i.ytimg.com/vi/L4pawZF-IcM/mqdefault.jpg",
+      "published": "2026-11-20T13:00:33+00:00"
+    },
     {
       "id": "djlGiJuEx_8",
       "title": "1 STUNDE KOMISCHER SOHN BEI SCHWIEGERTOCHTER GESUCHT!",
@@ -110,13 +117,6 @@
       "url": "https://www.youtube.com/watch?v=6Tj-LiQ94MM",
       "image": "https://i.ytimg.com/vi/6Tj-LiQ94MM/mqdefault.jpg",
       "published": "2026-11-12T13:00:23+00:00"
-    },
-    {
-      "id": "iH0iXBo2G4U",
-      "title": "ER HAT NUR EIN KLAPPHANDY & SIE FEIERT ES GAR NICHT! 😳 First Dates 💔",
-      "url": "https://www.youtube.com/watch?v=iH0iXBo2G4U",
-      "image": "https://i.ytimg.com/vi/iH0iXBo2G4U/mqdefault.jpg",
-      "published": "2026-11-11T13:00:38+00:00"
     }
   ]
 }

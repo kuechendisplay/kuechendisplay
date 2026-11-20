@@ -34,6 +34,7 @@
     --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --hairline:rgba(255,255,255,.08);
     --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A; --pink:#FF375F;
     --spotify-ink:#1ED760; --claude-ink:#E39A80;
+    --dock:#2C2C2E; --dock-sub:#2C2C2E; --dock-line:rgba(255,255,255,.2); --dock-ink:#F4B39B; --dock-track:rgba(235,235,245,.42);
     --tint-green:rgba(48,209,88,.2); --tint-orange:rgba(255,159,10,.2); --tint-gray:rgba(120,120,128,.32);
     --scrim:rgba(0,0,0,.55);
     color-scheme:dark;
@@ -45,6 +46,7 @@
   --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --hairline:rgba(255,255,255,.08);
   --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A; --pink:#FF375F;
   --spotify-ink:#1ED760; --claude-ink:#E39A80;
+  --dock:#2C2C2E; --dock-sub:#2C2C2E; --dock-line:rgba(255,255,255,.2); --dock-ink:#F4B39B; --dock-track:rgba(235,235,245,.42);
   --tint-green:rgba(48,209,88,.2); --tint-orange:rgba(255,159,10,.2); --tint-gray:rgba(120,120,128,.32);
   --scrim:rgba(0,0,0,.55);
   color-scheme:dark;
@@ -120,6 +122,10 @@ a.row:active,a.idea:active{background:var(--card-press)}
 
 /* Spotify */
 .spotify .glyph svg{color:#000;stroke:#000}
+.sp-row{padding:0 16px 0 0}
+.row-link{flex:1;min-width:0;align-self:stretch;display:flex;align-items:center;gap:12px;padding:10px 0 10px 14px;transition:background-color .15s}
+.row-link .row-name{flex:0 1 auto}
+a.row-link:active{background:var(--card-press)}
 .sp-dev{flex:none;max-width:48%;padding:10px 0 10px 8px;font-size:13px;font-weight:600;color:var(--spotify-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sp-body{gap:16px;padding-right:16px}
 .sp-cover{position:relative;flex:none;height:min(104px,100cqh);aspect-ratio:1;border-radius:12px;overflow:hidden;display:grid;place-items:center;background:var(--track);background:color-mix(in srgb, var(--spotify) 15%, var(--card))}
@@ -245,6 +251,10 @@ body[data-view="recipe"] #recipeView{display:grid}
 .spinner{width:34px;height:34px;border-radius:50%;border:3px solid var(--track);border-top-color:var(--label-2);animation:spin .9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ---------- Leichte Verschiebung gegen Nachleuchten ---------- */
+.board,.sub,.home-btn,.dock{translate:var(--sx,0px) var(--sy,0px);transition:translate 4s ease-in-out}
+.clock{translate:calc(var(--sx,0px) * .5) calc(var(--sy,0px) * 1.5);transition:translate 4s ease-in-out,opacity .4s}
+
 /* ---------- Spotify-Unterseite ---------- */
 .spotify{cursor:pointer}
 body[data-view="spotify"] #spView{display:grid}
@@ -296,35 +306,36 @@ body:not([data-view="home"]) .dock{
 }
 .mic-btn{
   flex:none;width:var(--h);height:var(--h);border-radius:50%;display:grid;place-items:center;
-  background:var(--card);box-shadow:0 0 0 1px var(--hairline);transition:transform .15s var(--spring);
+  background:var(--dock,var(--card));box-shadow:0 0 0 1px var(--dock-line,var(--hairline));transition:transform .15s var(--spring);
 }
 .mic-btn:active{transform:scale(.92)}
-.mic-btn svg{width:calc(var(--h) * .42);height:calc(var(--h) * .42);stroke:var(--claude-ink)}
+.mic-btn svg{width:calc(var(--h) * .42);height:calc(var(--h) * .42);stroke:var(--dock-ink,var(--claude-ink));stroke-width:2.3}
 body:not([data-view="home"]) .mic-btn,body:not([data-view="home"]) .island{
-  background:#000;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 14px 34px rgba(0,0,0,.4);
+  background:var(--dock-sub,#000);box-shadow:0 0 0 1px var(--dock-line,rgba(255,255,255,.12)),0 14px 34px rgba(0,0,0,.4);
 }
-body:not([data-view="home"]) .mic-btn svg{stroke:#E39A80}
+body:not([data-view="home"]) .mic-btn svg{stroke:var(--dock-ink,#E39A80)}
 body[data-view="ask"] .mic-btn{display:none}
 
 .island{
   position:relative;flex:none;width:var(--wc);height:var(--h);border-radius:calc(var(--h) / 2);
-  background:var(--card);box-shadow:0 0 0 1px var(--hairline);overflow:hidden;
+  background:var(--dock,var(--card));box-shadow:0 0 0 1px var(--dock-line,var(--hairline));overflow:hidden;
+  --ring-gap:var(--dock,var(--card));
   transition:width .55s var(--spring),height .55s var(--spring),border-radius .55s var(--spring),box-shadow .3s;
 }
 body:not([data-view="home"]) .island{
   --label:#FFFFFF; --label-2:rgba(235,235,245,.6); --label-3:rgba(235,235,245,.3);
-  --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --card:#000000;
+  --track:rgba(120,120,128,.32); --fill-idle:#FFFFFF; --card:var(--dock-sub,#000000); --dock-track:rgba(235,235,245,.42);
   --orange:#FF9F0A; --orange-ink:#FF9F0A; --green:#30D158; --green-ink:#30D158; --red:#FF453A;
   --tint-green:rgba(48,209,88,.22); --tint-orange:rgba(255,159,10,.22); --tint-gray:rgba(120,120,128,.34);
   color:#fff;
 }
-.island.open{width:var(--ow);height:var(--oh);border-radius:38px;box-shadow:0 0 0 1px var(--hairline),0 18px 44px rgba(0,0,0,.28)}
+.island.open{width:var(--ow);height:var(--oh);border-radius:38px;box-shadow:0 0 0 1px var(--dock-line,var(--hairline)),0 18px 44px rgba(0,0,0,.28)}
 .island-pill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:calc(var(--h) * .16);color:var(--label);transition:opacity .2s}
 .island.open .island-pill{opacity:0;pointer-events:none}
 .ring{flex:none;width:calc(var(--h) * .47);height:calc(var(--h) * .47)}
-.ring-bg{fill:none;stroke:var(--track);stroke-width:2.4}
+.ring-bg{fill:none;stroke:var(--dock-track,var(--track));stroke-width:2.4}
 .ring-fg{fill:none;stroke:var(--orange);stroke-width:2.4;stroke-linecap:round;stroke-dasharray:69.115;stroke-dashoffset:69.115;transition:stroke .3s}
-.hands{fill:none;stroke:var(--label);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
+.hands{fill:none;stroke:var(--label);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s}
 .island-time{font-size:calc(var(--h) * .31);font-weight:600;letter-spacing:-.015em;font-variant-numeric:tabular-nums;min-width:3.2ch;transition:color .3s}
 .island[data-status="running"] .hands,.island[data-status="paused"] .hands{stroke:var(--orange)}
 .island[data-status="running"] .island-time{color:var(--orange)}
@@ -351,10 +362,10 @@ body:not([data-view="home"]) .island-panel{left:50%;transform:translateX(-50%)}
   transition:transform .12s,opacity .2s,background-color .2s,color .2s,box-shadow .2s;
 }
 .round:active{transform:scale(.95)}
-.r-gray{background:var(--tint-gray);color:var(--label);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-gray)}
+.r-gray{background:var(--tint-gray);color:var(--label);box-shadow:0 0 0 3px var(--ring-gap,var(--card)),0 0 0 5px var(--tint-gray)}
 .r-gray:disabled{opacity:.35;cursor:default;transform:none}
-.r-green{background:var(--tint-green);color:var(--green-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-green)}
-.r-orange{background:var(--tint-orange);color:var(--orange-ink);box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tint-orange)}
+.r-green{background:var(--tint-green);color:var(--green-ink);box-shadow:0 0 0 3px var(--ring-gap,var(--card)),0 0 0 5px var(--tint-green)}
+.r-orange{background:var(--tint-orange);color:var(--orange-ink);box-shadow:0 0 0 3px var(--ring-gap,var(--card)),0 0 0 5px var(--tint-orange)}
 .slider-wrap{display:flex;flex-direction:column;gap:6px}
 .slider{position:relative;height:50px;border-radius:999px;background:var(--track);overflow:hidden;touch-action:none;cursor:grab;isolation:isolate}
 .fill{
@@ -523,7 +534,7 @@ body[data-view="ask"] #askView{display:grid}
     </div>
 
     <article class="card source video" style="--accent:var(--red)">
-      <a class="row" id="ytHome" data-open="video" href="https://www.youtube.com/@dailyceddo/videos">
+      <a class="row" id="ytHome" data-open="app" href="https://www.youtube.com/@dailyceddo/videos">
         <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-play"/></svg></span>
         <span class="row-name">Daily Ceddo</span>
         <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
@@ -541,9 +552,12 @@ body[data-view="ask"] #askView{display:grid}
     </article>
 
     <article class="card source spotify" id="spCard" data-sp="off" style="--accent:var(--spotify)">
-      <div class="row">
-        <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-music"/></svg></span>
-        <span class="row-name">Spotify</span>
+      <div class="row sp-row">
+        <a class="row-link" id="spAppLink" data-open="app" href="https://open.spotify.com/" aria-label="Spotify-App öffnen">
+          <span class="glyph" aria-hidden="true"><svg class="i"><use href="#i-music"/></svg></span>
+          <span class="row-name">Spotify</span>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </a>
         <button class="sp-dev" id="spDevice" type="button">Gerät wählen</button>
       </div>
       <div class="idea sp-body">
@@ -919,6 +933,7 @@ document.addEventListener("click", e => {
   const a = e.target.closest("a[data-open]");
   if (!a) return;
   e.preventDefault();
+  if (a.dataset.open === "app") { e.stopPropagation(); leave(appUrl(a.href)); return; }
   if (a.dataset.open === "video" && a.dataset.video) go({ view: "video", id: a.dataset.video });
   else if (a.dataset.open === "site" && CONFIG.recipeProxy && isRecipeUrl(a.href)) go({ view: "recipe", url: a.href });
   else if (a.dataset.open === "site" && CONFIG.embedSites) go({ view: "web", url: a.href });
@@ -932,6 +947,14 @@ $("micBtn").addEventListener("click", e => {
   startListening();
 });
 
+/* Auf Android direkt die passende App öffnen (YouTube bzw. Spotify), sonst die Webseite */
+function appUrl(url){
+  if (!/Android/i.test(navigator.userAgent)) return url;
+  const fb = ";S.browser_fallback_url=" + encodeURIComponent(url) + ";end";
+  if (/spotify\.com/.test(url)) return "intent://open#Intent;scheme=spotify;package=com.spotify.music" + fb;
+  if (/youtube\.com/.test(url)) return "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.google.android.youtube" + fb;
+  return url;
+}
 function leave(url){
   if (state.status !== "running") { location.assign(url); return; }
   confirmSheet("Der Timer läuft",
@@ -1619,18 +1642,54 @@ async function spSearch(){
 }
 $("spvSearch").addEventListener("input", () => { clearTimeout(SPV.searchT); SPV.searchT = setTimeout(spSearch, 450); });
 
-/* Auswahl auf dem gewählten bzw. aktiven Gerät abspielen */
+/* Gerät wählen: gemerktes Gerät, sonst aktives, sonst das Tablet, sonst irgendeins */
+async function spPickDevice(){
+  const list = await spDevices();
+  const pref = store.get("kd.sp.device");
+  return list.find(x => x.name === pref) || list.find(x => x.is_active) || list.find(x => x.type === "Tablet") || list[0] || null;
+}
+/* Starten: mit Auswahl (body) gezielt auf dem Gerät, sonst fortsetzen bzw. dorthin übertragen */
+async function spStartOn(dev, body, current){
+  if (body) await spApi("PUT", "/me/player/play?device_id=" + encodeURIComponent(dev.id), body);
+  else if (current) await spApi("PUT", "/me/player/play");
+  else await spApi("PUT", "/me/player", { device_ids: [dev.id], play: true });
+}
+/* Kein Gerät da: Spotify-App kurz öffnen (meldet sich dann als Gerät an).
+   Nach dem Zurückwischen startet die gewünschte Wiedergabe von selbst. */
+function spWakeApp(body){
+  SP.pending = { body: body || null, t: Date.now() };
+  spNote("Spotify-App wird geöffnet, danach einfach zurückwischen");
+  setTimeout(() => leave(appUrl("https://open.spotify.com/")), 700);
+}
+async function spResumePending(){
+  const p = SP.pending;
+  if (!p || p.busy) return;
+  if (Date.now() - p.t > 180000){ SP.pending = null; return; }
+  p.busy = true;
+  for (let k = 0; k < 6; k++){
+    const dev = await spPickDevice().catch(() => null);
+    if (dev){
+      SP.pending = null;
+      try { await spStartOn(dev, p.body, false); vibrate(10); } catch(e){ spNote(spErrText(e)); }
+      setTimeout(spPoll, 900); return;
+    }
+    await new Promise(r => setTimeout(r, 1500));
+  }
+  SP.pending = null; spNote("Spotify-App meldet sich nicht, bitte nochmal Play tippen");
+}
+/* Auswahl bzw. Fortsetzen auf dem aktuellen oder gemerkten Gerät */
 async function spPlay(body){
   try {
-    let id = SP.state && SP.state.device && SP.state.device.id;
-    if (!id){
-      const list = await spDevices();
-      const pref = store.get("kd.sp.device");
-      const dev = list.find(x => x.name === pref) || list.find(x => x.is_active) || list[0];
-      if (!dev){ spNote("Kein Spotify-Gerät gefunden. Echo oder Spotify-App einschalten."); return; }
-      id = dev.id;
+    const cur = SP.state && SP.state.device && SP.state.device.id ? SP.state.device : null;
+    const dev = cur || await spPickDevice();
+    if (!dev) return spWakeApp(body);
+    try { await spStartOn(dev, body, !!cur); }
+    catch(e){
+      if (e.status !== 404) throw e;          // Gerät eingeschlafen: neu suchen
+      const again = await spPickDevice();
+      if (!again) return spWakeApp(body);
+      await spStartOn(again, body, false);
     }
-    await spApi("PUT", "/me/player/play?device_id=" + encodeURIComponent(id), body);
     vibrate(10);
   } catch(e){ spNote(spErrText(e)); }
   setTimeout(spPoll, 900);
@@ -1647,15 +1706,9 @@ async function spPlayPause(){
     if (s && s.is_playing){
       s.is_playing = false; s.progress_ms += Date.now() - s._at; s._at = Date.now(); renderSpotify();
       await spApi("PUT", "/me/player/pause");
-    } else if (s && s.device){
-      if (s.item){ s.is_playing = true; s._at = Date.now(); renderSpotify(); }
-      await spApi("PUT", "/me/player/play");
     } else {
-      const list = await spDevices();
-      const pref = store.get("kd.sp.device");
-      const dev = list.find(x => x.name === pref) || list.find(x => x.is_active) || list[0];
-      if (!dev){ spNote("Kein Spotify-Gerät gefunden. Echo oder Spotify-App einschalten."); return; }
-      await spApi("PUT", "/me/player", { device_ids: [dev.id], play: true });
+      if (s && s.item && s.device){ s.is_playing = true; s._at = Date.now(); renderSpotify(); }
+      return spPlay(null);
     }
   } catch(e){ spNote(spErrText(e)); }
   setTimeout(spPoll, 800);
@@ -1669,7 +1722,12 @@ async function spOpenDevices(){
   $("devList").replaceChildren(el("p", null, "Suche Geräte …"));
   try {
     const list = await spDevices();
-    if (!list.length){ $("devList").replaceChildren(el("p", null, "Keine Geräte gefunden. Echo oder Spotify-App einschalten.")); return; }
+    if (!list.length){
+      const b = el("button", "dev-item"); b.type = "button";
+      b.append(el("span", null, "Spotify-App auf dem Tablet öffnen"), el("small", null, "danach zurückwischen"));
+      b.addEventListener("click", () => { $("devSheet").hidden = true; leave(appUrl("https://open.spotify.com/")); });
+      $("devList").replaceChildren(el("p", null, "Keine Geräte gefunden."), b); return;
+    }
     $("devList").replaceChildren(...list.map(d => {
       const b = el("button", "dev-item"); b.type = "button";
       if (d.is_active) b.setAttribute("aria-current", "true");
@@ -1691,7 +1749,7 @@ $("spvPrev").addEventListener("click", () => spSkip("previous"));
 $("spvNext").addEventListener("click", () => spSkip("next"));
 $("spvDev").addEventListener("click", spOpenDevices);
 $("spCard").addEventListener("click", e => {
-  if (e.target.closest("button")) return;
+  if (e.target.closest("button, a")) return;
   if (!CONFIG.spotifyClientId) return;
   if (!SP.token) { spLogin(); return; }
   go({ view: "spotify" });
@@ -1836,6 +1894,7 @@ function resumeIfNeeded(){
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState !== "visible") { if (view === "ask") stopListening(true); return; }
   loadFeed(); resumeIfNeeded(); if (view === "home") spPoll();
+  if (SP.pending) spResumePending();
 });
 window.addEventListener("pageshow", e => { if (e.persisted) { loadFeed(); resumeIfNeeded(); } });
 setInterval(() => { if (state.status === "running" && Date.now() >= state.endAt) finish(); }, 1000);
@@ -1851,6 +1910,22 @@ setInterval(() => { if (state.status === "running" && Date.now() >= state.endAt)
   if (state.status === "done") state.status = "idle";
   render();
   if (state.status === "running") loop();
+})();
+
+/* Gegen Nachleuchten: alle 30 Minuten alles um einige Pixel versetzen (12 Positionen,
+   die Uhr wandert zusätzlich etwas weiter). Position folgt der Uhrzeit, übersteht also Neuladen. */
+(function(){
+  const pos = [[0,0],[6,3],[-3,7],[-7,-2],[3,-6],[8,0],[0,8],[-8,0],[0,-8],[5,5],[-5,5],[-5,-5]];
+  let last = -1;
+  const apply = () => {
+    const i = Math.floor(Date.now() / 1800000) % pos.length;
+    if (i === last) return; last = i;
+    const [x, y] = pos[i];
+    document.documentElement.style.setProperty("--sx", x + "px");
+    document.documentElement.style.setProperty("--sy", y + "px");
+  };
+  apply();
+  setInterval(apply, 60000);
 })();
 
 (async function init(){

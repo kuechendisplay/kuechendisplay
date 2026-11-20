@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-20T13:30:39.703Z",
+  "updated": "2026-11-20T21:06:14.168Z",
   "days": {
     "2026-11-20": {
       "dish": {
@@ -16,13 +16,13 @@
     "2026-11-21": {
       "dish": {
         "name": "Shakshuka",
-        "url": "https://www.chefkoch.de/rs/s0/Shakshuka/Rezepte.html",
-        "image": null
+        "url": "https://www.chefkoch.de/rezepte/1109971217065453/Shakshuka.html",
+        "image": "https://img.chefkoch-cdn.de/rezepte/1109971217065453/bilder/1622430/crop-960x540/shakshuka.jpg"
       },
       "bake": {
         "name": "Apfelkuchen",
-        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Apfelkuchen",
-        "image": null
+        "url": "https://www.einfachbacken.de/rezepte/apfelkuchen-mit-streusel-nach-omas-rezept",
+        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-08/apfelkuchen-png-converted.jpg?h=7d326bee&itok=q-XNPLyW"
       }
     }
   },

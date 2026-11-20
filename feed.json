@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-20T21:06:14.168Z",
+  "updated": "2026-11-20T23:02:55.710Z",
   "days": {
-    "2026-11-20": {
-      "dish": {
-        "name": "Kartoffelgratin",
-        "url": "https://www.chefkoch.de/rezepte/644981165672475/Das-beste-Kartoffelgratin.html",
-        "image": "https://img.chefkoch-cdn.de/rezepte/644981165672475/bilder/1615787/crop-960x540/das-beste-kartoffelgratin.jpg"
-      },
-      "bake": {
-        "name": "Mohnkuchen",
-        "url": "https://www.einfachbacken.de/rezepte/mohnkuchen-mit-streusel-der-leckere-klassiker",
-        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2019-04/mohnkuchen.jpg?h=a1e1a043&itok=aqf3TIPw"
-      }
-    },
     "2026-11-21": {
       "dish": {
         "name": "Shakshuka",
@@ -23,6 +11,18 @@
         "name": "Apfelkuchen",
         "url": "https://www.einfachbacken.de/rezepte/apfelkuchen-mit-streusel-nach-omas-rezept",
         "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-08/apfelkuchen-png-converted.jpg?h=7d326bee&itok=q-XNPLyW"
+      }
+    },
+    "2026-11-22": {
+      "dish": {
+        "name": "Flammkuchen",
+        "url": "https://www.chefkoch.de/rs/s0/Flammkuchen/Rezepte.html",
+        "image": null
+      },
+      "bake": {
+        "name": "Christstollen",
+        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Christstollen",
+        "image": null
       }
     }
   },

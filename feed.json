@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T01:32:17.808Z",
+  "updated": "2026-11-21T13:17:00.953Z",
   "days": {
     "2026-11-21": {
       "dish": {
@@ -27,13 +27,20 @@
     }
   },
   "video": {
-    "id": "L4pawZF-IcM",
-    "title": "NEIN DANKE! ER WILL SIE IN DER FOTOBOX HOCH HEBEN! 😳 First Dates 💔",
-    "url": "https://www.youtube.com/watch?v=L4pawZF-IcM",
-    "image": "https://i.ytimg.com/vi/L4pawZF-IcM/mqdefault.jpg",
-    "published": "2026-11-20T13:00:33+00:00"
+    "id": "GtiK5_XUsXk",
+    "title": "ER HATTE ALS KIND EINEN TRAGISCHEN UNFALL! 😳 First Dates 💔",
+    "url": "https://www.youtube.com/watch?v=GtiK5_XUsXk",
+    "image": "https://i.ytimg.com/vi/GtiK5_XUsXk/mqdefault.jpg",
+    "published": "2026-11-21T13:00:15+00:00"
   },
   "videos": [
+    {
+      "id": "GtiK5_XUsXk",
+      "title": "ER HATTE ALS KIND EINEN TRAGISCHEN UNFALL! 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=GtiK5_XUsXk",
+      "image": "https://i.ytimg.com/vi/GtiK5_XUsXk/mqdefault.jpg",
+      "published": "2026-11-21T13:00:15+00:00"
+    },
     {
       "id": "L4pawZF-IcM",
       "title": "NEIN DANKE! ER WILL SIE IN DER FOTOBOX HOCH HEBEN! 😳 First Dates 💔",
@@ -110,13 +117,6 @@
       "url": "https://www.youtube.com/watch?v=vCvhxKzN-ig",
       "image": "https://i.ytimg.com/vi/vCvhxKzN-ig/mqdefault.jpg",
       "published": "2026-11-13T13:00:35+00:00"
-    },
-    {
-      "id": "6Tj-LiQ94MM",
-      "title": "ER HAT GAR KEIN INTERESSE 😬 First Dates 💔",
-      "url": "https://www.youtube.com/watch?v=6Tj-LiQ94MM",
-      "image": "https://i.ytimg.com/vi/6Tj-LiQ94MM/mqdefault.jpg",
-      "published": "2026-11-12T13:00:23+00:00"
     }
   ]
 }

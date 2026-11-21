@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T19:07:19.398Z",
+  "updated": "2026-11-21T20:57:11.935Z",
   "days": {
     "2026-11-21": {
       "dish": {
@@ -16,8 +16,8 @@
     "2026-11-22": {
       "dish": {
         "name": "Flammkuchen",
-        "url": "https://www.chefkoch.de/rs/s0/Flammkuchen/Rezepte.html",
-        "image": null
+        "url": "https://www.chefkoch.de/rezepte/1112251217261411/Einfacher-Flammkuchen.html",
+        "image": "https://img.chefkoch-cdn.de/rezepte/1112251217261411/bilder/1618358/crop-960x540/einfacher-flammkuchen.jpg"
       },
       "bake": {
         "name": "Christstollen",

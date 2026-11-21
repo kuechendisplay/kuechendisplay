@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-20T23:02:55.710Z",
+  "updated": "2026-11-21T01:32:17.808Z",
   "days": {
     "2026-11-21": {
       "dish": {
@@ -21,8 +21,8 @@
       },
       "bake": {
         "name": "Christstollen",
-        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Christstollen",
-        "image": null
+        "url": "https://www.einfachbacken.de/rezepte/christstollen-omas-bestes-rezept",
+        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-11/christstollen.jpg?h=a1e1a043&itok=zDpfHeu8"
       }
     }
   },

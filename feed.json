@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-21T20:57:11.935Z",
+  "updated": "2026-11-22T01:28:35.079Z",
   "days": {
-    "2026-11-21": {
-      "dish": {
-        "name": "Shakshuka",
-        "url": "https://www.chefkoch.de/rezepte/1109971217065453/Shakshuka.html",
-        "image": "https://img.chefkoch-cdn.de/rezepte/1109971217065453/bilder/1622430/crop-960x540/shakshuka.jpg"
-      },
-      "bake": {
-        "name": "Apfelkuchen",
-        "url": "https://www.einfachbacken.de/rezepte/apfelkuchen-mit-streusel-nach-omas-rezept",
-        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-08/apfelkuchen-png-converted.jpg?h=7d326bee&itok=q-XNPLyW"
-      }
-    },
     "2026-11-22": {
       "dish": {
         "name": "Flammkuchen",
@@ -23,6 +11,18 @@
         "name": "Christstollen",
         "url": "https://www.einfachbacken.de/rezepte/christstollen-omas-bestes-rezept",
         "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-11/christstollen.jpg?h=a1e1a043&itok=zDpfHeu8"
+      }
+    },
+    "2026-11-23": {
+      "dish": {
+        "name": "Schupfnudeln mit Sauerkraut",
+        "url": "https://www.chefkoch.de/rs/s0/Schupfnudeln%20mit%20Sauerkraut/Rezepte.html",
+        "image": null
+      },
+      "bake": {
+        "name": "Butterkuchen",
+        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Butterkuchen",
+        "image": null
       }
     }
   },

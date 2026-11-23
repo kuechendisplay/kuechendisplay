@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-23T19:20:16.530Z",
+  "updated": "2026-11-23T23:10:41.423Z",
   "days": {
-    "2026-11-23": {
-      "dish": {
-        "name": "Schupfnudeln mit Sauerkraut",
-        "url": "https://www.chefkoch.de/rs/s0/Schupfnudeln%20mit%20Sauerkraut/Rezepte.html",
-        "image": null
-      },
-      "bake": {
-        "name": "Butterkuchen",
-        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Butterkuchen",
-        "image": null
-      }
-    },
     "2026-11-24": {
       "dish": {
         "name": "Pfannkuchen",
@@ -23,6 +11,18 @@
         "name": "Apfelstrudel",
         "url": "https://www.einfachbacken.de/rezepte/apfelstrudel-wiener-art-einfach-nach-omas-rezept",
         "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2019-03/apfelstrudel_4495.jpg?h=4521fff0&itok=ZSifX6-F"
+      }
+    },
+    "2026-11-25": {
+      "dish": {
+        "name": "Rotes Thai-Curry",
+        "url": "https://www.chefkoch.de/rs/s0/Rotes%20Thai-Curry/Rezepte.html",
+        "image": null
+      },
+      "bake": {
+        "name": "Brownies",
+        "url": "https://www.einfachbacken.de/rezepte/schoko-brownies-so-werden-sie-besonders-saftig",
+        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-07/brownies-1_zuschnitt_bearb-png-converted.jpg?h=7cece4cc&itok=gggCE_Bd"
       }
     }
   },

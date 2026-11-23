@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-22T20:59:07.548Z",
+  "updated": "2026-11-23T01:34:33.627Z",
   "days": {
-    "2026-11-22": {
-      "dish": {
-        "name": "Flammkuchen",
-        "url": "https://www.chefkoch.de/rezepte/1112251217261411/Einfacher-Flammkuchen.html",
-        "image": "https://img.chefkoch-cdn.de/rezepte/1112251217261411/bilder/1618358/crop-960x540/einfacher-flammkuchen.jpg"
-      },
-      "bake": {
-        "name": "Christstollen",
-        "url": "https://www.einfachbacken.de/rezepte/christstollen-omas-bestes-rezept",
-        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-11/christstollen.jpg?h=a1e1a043&itok=zDpfHeu8"
-      }
-    },
     "2026-11-23": {
       "dish": {
         "name": "Schupfnudeln mit Sauerkraut",
@@ -22,6 +10,18 @@
       "bake": {
         "name": "Butterkuchen",
         "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Butterkuchen",
+        "image": null
+      }
+    },
+    "2026-11-24": {
+      "dish": {
+        "name": "Pfannkuchen",
+        "url": "https://www.chefkoch.de/rezepte/1208161226570428/Der-perfekte-Pfannkuchen-gelingt-einfach-immer.html",
+        "image": "https://img.chefkoch-cdn.de/rezepte/1208161226570428/bilder/1626735/crop-960x540/der-perfekte-pfannkuchen-gelingt-einfach-immer.jpg"
+      },
+      "bake": {
+        "name": "Apfelstrudel",
+        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Apfelstrudel",
         "image": null
       }
     }

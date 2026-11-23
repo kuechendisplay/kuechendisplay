@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-23T15:25:43.559Z",
+  "updated": "2026-11-23T19:20:16.530Z",
   "days": {
     "2026-11-23": {
       "dish": {
@@ -21,8 +21,8 @@
       },
       "bake": {
         "name": "Apfelstrudel",
-        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Apfelstrudel",
-        "image": null
+        "url": "https://www.einfachbacken.de/rezepte/apfelstrudel-wiener-art-einfach-nach-omas-rezept",
+        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2019-03/apfelstrudel_4495.jpg?h=4521fff0&itok=ZSifX6-F"
       }
     }
   },
@@ -54,13 +54,6 @@
       "url": "https://www.youtube.com/watch?v=GtiK5_XUsXk",
       "image": "https://i.ytimg.com/vi/GtiK5_XUsXk/mqdefault.jpg",
       "published": "2026-11-21T13:00:15+00:00"
-    },
-    {
-      "id": "L4pawZF-IcM",
-      "title": "NEIN DANKE! ER WILL SIE IN DER FOTOBOX HOCH HEBEN! 😳 First Dates 💔",
-      "url": "https://www.youtube.com/watch?v=L4pawZF-IcM",
-      "image": "https://i.ytimg.com/vi/L4pawZF-IcM/mqdefault.jpg",
-      "published": "2026-11-20T13:00:33+00:00"
     }
   ]
 }

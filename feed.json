@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-24T13:35:57.133Z",
+  "updated": "2026-11-24T15:21:48.646Z",
   "days": {
     "2026-11-24": {
       "dish": {
@@ -16,8 +16,8 @@
     "2026-11-25": {
       "dish": {
         "name": "Rotes Thai-Curry",
-        "url": "https://www.chefkoch.de/rs/s0/Rotes%20Thai-Curry/Rezepte.html",
-        "image": null
+        "url": "https://www.chefkoch.de/rezepte/1021641207381435/1a-Spritzgebaeck.html",
+        "image": "https://img.chefkoch-cdn.de/rezepte/1021641207381435/bilder/1518855/crop-960x540/1a-spritzgebaeck.jpg"
       },
       "bake": {
         "name": "Brownies",

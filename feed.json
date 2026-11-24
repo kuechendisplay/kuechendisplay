@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-24T19:19:18.241Z",
+  "updated": "2026-11-24T23:12:09.629Z",
   "days": {
-    "2026-11-24": {
-      "dish": {
-        "name": "Pfannkuchen",
-        "url": "https://www.chefkoch.de/rezepte/1208161226570428/Der-perfekte-Pfannkuchen-gelingt-einfach-immer.html",
-        "image": "https://img.chefkoch-cdn.de/rezepte/1208161226570428/bilder/1626735/crop-960x540/der-perfekte-pfannkuchen-gelingt-einfach-immer.jpg"
-      },
-      "bake": {
-        "name": "Apfelstrudel",
-        "url": "https://www.einfachbacken.de/rezepte/apfelstrudel-wiener-art-einfach-nach-omas-rezept",
-        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2019-03/apfelstrudel_4495.jpg?h=4521fff0&itok=ZSifX6-F"
-      }
-    },
     "2026-11-25": {
       "dish": {
         "name": "Rotes Thai-Curry",
@@ -23,6 +11,18 @@
         "name": "Brownies",
         "url": "https://www.einfachbacken.de/rezepte/schoko-brownies-so-werden-sie-besonders-saftig",
         "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-07/brownies-1_zuschnitt_bearb-png-converted.jpg?h=7cece4cc&itok=gggCE_Bd"
+      }
+    },
+    "2026-11-26": {
+      "dish": {
+        "name": "Linsensuppe",
+        "url": "https://www.chefkoch.de/rs/s0/Linsensuppe/Rezepte.html",
+        "image": null
+      },
+      "bake": {
+        "name": "Hefezopf",
+        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Hefezopf",
+        "image": null
       }
     }
   },

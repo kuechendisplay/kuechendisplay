@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-24T11:10:24.362Z",
+  "updated": "2026-11-24T13:35:57.133Z",
   "days": {
     "2026-11-24": {
       "dish": {
@@ -27,13 +27,20 @@
     }
   },
   "video": {
-    "id": "pyPMX7tlJcY",
-    "title": "STEFFEN (30) WILL KEINEN HUNGERHAKEN! 😳 First Dates 💔",
-    "url": "https://www.youtube.com/watch?v=pyPMX7tlJcY",
-    "image": "https://i.ytimg.com/vi/pyPMX7tlJcY/mqdefault.jpg",
-    "published": "2026-11-23T13:00:11+00:00"
+    "id": "ViyuCqRtat0",
+    "title": "OMG! DAS SÜßESTE RENTNER DATE EVER! 😍 First Dates 💔",
+    "url": "https://www.youtube.com/watch?v=ViyuCqRtat0",
+    "image": "https://i.ytimg.com/vi/ViyuCqRtat0/mqdefault.jpg",
+    "published": "2026-11-24T13:00:35+00:00"
   },
   "videos": [
+    {
+      "id": "ViyuCqRtat0",
+      "title": "OMG! DAS SÜßESTE RENTNER DATE EVER! 😍 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=ViyuCqRtat0",
+      "image": "https://i.ytimg.com/vi/ViyuCqRtat0/mqdefault.jpg",
+      "published": "2026-11-24T13:00:35+00:00"
+    },
     {
       "id": "pyPMX7tlJcY",
       "title": "STEFFEN (30) WILL KEINEN HUNGERHAKEN! 😳 First Dates 💔",

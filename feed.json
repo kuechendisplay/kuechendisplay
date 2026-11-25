@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-25T19:14:49.145Z",
+  "updated": "2026-11-25T23:10:30.726Z",
   "days": {
-    "2026-11-25": {
-      "dish": {
-        "name": "Rotes Thai-Curry",
-        "url": "https://www.chefkoch.de/rezepte/1021641207381435/1a-Spritzgebaeck.html",
-        "image": "https://img.chefkoch-cdn.de/rezepte/1021641207381435/bilder/1518855/crop-960x540/1a-spritzgebaeck.jpg"
-      },
-      "bake": {
-        "name": "Brownies",
-        "url": "https://www.einfachbacken.de/rezepte/schoko-brownies-so-werden-sie-besonders-saftig",
-        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-07/brownies-1_zuschnitt_bearb-png-converted.jpg?h=7cece4cc&itok=gggCE_Bd"
-      }
-    },
     "2026-11-26": {
       "dish": {
         "name": "Linsensuppe",
@@ -23,6 +11,18 @@
         "name": "Hefezopf",
         "url": "https://www.einfachbacken.de/rezepte/hefezopf",
         "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2026-04/hefezopf_28496.jpg?h=84071268&itok=oia54TD1"
+      }
+    },
+    "2026-11-27": {
+      "dish": {
+        "name": "Kürbissuppe",
+        "url": "https://www.chefkoch.de/rezepte/259781101566295/Kuerbissuppe-mit-Ingwer-und-Kokosmilch.html",
+        "image": "https://img.chefkoch-cdn.de/rezepte/259781101566295/bilder/1518870/crop-960x540/kuerbissuppe-mit-ingwer-und-kokosmilch.jpg"
+      },
+      "bake": {
+        "name": "Eierlikörkuchen",
+        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Eierlik%C3%B6rkuchen",
+        "image": null
       }
     }
   },

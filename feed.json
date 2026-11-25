@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T13:41:26.903Z",
+  "updated": "2026-11-25T19:14:49.145Z",
   "days": {
     "2026-11-25": {
       "dish": {
@@ -21,8 +21,8 @@
       },
       "bake": {
         "name": "Hefezopf",
-        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Hefezopf",
-        "image": null
+        "url": "https://www.einfachbacken.de/rezepte/hefezopf",
+        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2026-04/hefezopf_28496.jpg?h=84071268&itok=oia54TD1"
       }
     }
   },
@@ -47,13 +47,6 @@
       "url": "https://www.youtube.com/watch?v=ViyuCqRtat0",
       "image": "https://i.ytimg.com/vi/ViyuCqRtat0/mqdefault.jpg",
       "published": "2026-11-24T13:00:35+00:00"
-    },
-    {
-      "id": "pyPMX7tlJcY",
-      "title": "STEFFEN (30) WILL KEINEN HUNGERHAKEN! 😳 First Dates 💔",
-      "url": "https://www.youtube.com/watch?v=pyPMX7tlJcY",
-      "image": "https://i.ytimg.com/vi/pyPMX7tlJcY/mqdefault.jpg",
-      "published": "2026-11-23T13:00:11+00:00"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T23:10:30.726Z",
+  "updated": "2026-11-26T13:40:26.967Z",
   "days": {
     "2026-11-26": {
       "dish": {
@@ -27,13 +27,20 @@
     }
   },
   "video": {
-    "id": "S-tnIyDF1Tw",
-    "title": "ES BRENNT BEI IHM UNTEN 😳 First Dates 💔",
-    "url": "https://www.youtube.com/watch?v=S-tnIyDF1Tw",
-    "image": "https://i.ytimg.com/vi/S-tnIyDF1Tw/mqdefault.jpg",
-    "published": "2026-11-25T13:00:04+00:00"
+    "id": "gZ_SXpeFVVg",
+    "title": "ER WILL UNBEDINGT KRASS BEI IHR ANKOMMEN! 😬 First Dates 💔",
+    "url": "https://www.youtube.com/watch?v=gZ_SXpeFVVg",
+    "image": "https://i.ytimg.com/vi/gZ_SXpeFVVg/mqdefault.jpg",
+    "published": "2026-11-26T13:00:24+00:00"
   },
   "videos": [
+    {
+      "id": "gZ_SXpeFVVg",
+      "title": "ER WILL UNBEDINGT KRASS BEI IHR ANKOMMEN! 😬 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=gZ_SXpeFVVg",
+      "image": "https://i.ytimg.com/vi/gZ_SXpeFVVg/mqdefault.jpg",
+      "published": "2026-11-26T13:00:24+00:00"
+    },
     {
       "id": "S-tnIyDF1Tw",
       "title": "ES BRENNT BEI IHM UNTEN 😳 First Dates 💔",

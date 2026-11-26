@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-26T13:40:26.967Z",
+  "updated": "2026-11-26T23:14:12.507Z",
   "days": {
-    "2026-11-26": {
-      "dish": {
-        "name": "Linsensuppe",
-        "url": "https://www.chefkoch.de/rs/s0/Linsensuppe/Rezepte.html",
-        "image": null
-      },
-      "bake": {
-        "name": "Hefezopf",
-        "url": "https://www.einfachbacken.de/rezepte/hefezopf",
-        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2026-04/hefezopf_28496.jpg?h=84071268&itok=oia54TD1"
-      }
-    },
     "2026-11-27": {
       "dish": {
         "name": "Kürbissuppe",
@@ -21,8 +9,20 @@
       },
       "bake": {
         "name": "Eierlikörkuchen",
-        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Eierlik%C3%B6rkuchen",
-        "image": null
+        "url": "https://www.einfachbacken.de/rezepte/eierlikoertorte-cremig-lecker",
+        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-12/eierlikoertorte_66314.jpg?h=4521fff0&itok=X6A1kfIU"
+      }
+    },
+    "2026-11-28": {
+      "dish": {
+        "name": "Falafel mit Hummus",
+        "url": "https://www.chefkoch.de/rezepte/4089131641335576/Falafel-mit-Hummus-und-Salat.html",
+        "image": "https://img.chefkoch-cdn.de/rezepte/4089131641335576/bilder/1443207/crop-960x540/falafel-mit-hummus-und-salat.jpg"
+      },
+      "bake": {
+        "name": "Bienenstich",
+        "url": "https://www.einfachbacken.de/rezepte/bienenstich",
+        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-09/bienenstich_44333.jpg?h=4521fff0&itok=qViLnCNg"
       }
     }
   },

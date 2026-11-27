@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-27T09:29:42.221Z",
+  "updated": "2026-11-27T13:36:59.519Z",
   "days": {
     "2026-11-27": {
       "dish": {
@@ -27,13 +27,20 @@
     }
   },
   "video": {
-    "id": "gZ_SXpeFVVg",
-    "title": "ER WILL UNBEDINGT KRASS BEI IHR ANKOMMEN! 😬 First Dates 💔",
-    "url": "https://www.youtube.com/watch?v=gZ_SXpeFVVg",
-    "image": "https://i.ytimg.com/vi/gZ_SXpeFVVg/mqdefault.jpg",
-    "published": "2026-11-26T13:00:24+00:00"
+    "id": "eZjHf2GOrqs",
+    "title": "\"ICH BIN P0R$0 DARSTELLER!\" 😳 First Dates 💔",
+    "url": "https://www.youtube.com/watch?v=eZjHf2GOrqs",
+    "image": "https://i.ytimg.com/vi/eZjHf2GOrqs/mqdefault.jpg",
+    "published": "2026-11-27T13:00:26+00:00"
   },
   "videos": [
+    {
+      "id": "eZjHf2GOrqs",
+      "title": "\"ICH BIN P0R$0 DARSTELLER!\" 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=eZjHf2GOrqs",
+      "image": "https://i.ytimg.com/vi/eZjHf2GOrqs/mqdefault.jpg",
+      "published": "2026-11-27T13:00:26+00:00"
+    },
     {
       "id": "gZ_SXpeFVVg",
       "title": "ER WILL UNBEDINGT KRASS BEI IHR ANKOMMEN! 😬 First Dates 💔",

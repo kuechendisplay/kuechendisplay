@@ -1,18 +1,6 @@
 {
-  "updated": "2026-11-27T15:16:04.508Z",
+  "updated": "2026-11-27T23:12:31.482Z",
   "days": {
-    "2026-11-27": {
-      "dish": {
-        "name": "Kürbissuppe",
-        "url": "https://www.chefkoch.de/rezepte/259781101566295/Kuerbissuppe-mit-Ingwer-und-Kokosmilch.html",
-        "image": "https://img.chefkoch-cdn.de/rezepte/259781101566295/bilder/1518870/crop-960x540/kuerbissuppe-mit-ingwer-und-kokosmilch.jpg"
-      },
-      "bake": {
-        "name": "Eierlikörkuchen",
-        "url": "https://www.einfachbacken.de/rezepte/eierlikoertorte-cremig-lecker",
-        "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-12/eierlikoertorte_66314.jpg?h=4521fff0&itok=X6A1kfIU"
-      }
-    },
     "2026-11-28": {
       "dish": {
         "name": "Falafel mit Hummus",
@@ -23,6 +11,18 @@
         "name": "Bienenstich",
         "url": "https://www.einfachbacken.de/rezepte/bienenstich",
         "image": "https://www.einfachbacken.de/sites/einfachbacken.de/files/styles/16_9/public/2018-09/bienenstich_44333.jpg?h=4521fff0&itok=qViLnCNg"
+      }
+    },
+    "2026-11-29": {
+      "dish": {
+        "name": "Burrito Bowl",
+        "url": "https://www.chefkoch.de/rs/s0/Burrito%20Bowl/Rezepte.html",
+        "image": null
+      },
+      "bake": {
+        "name": "Amerikaner",
+        "url": "https://duckduckgo.com/?q=%5Csite%3Aeinfachbacken.de%20Amerikaner",
+        "image": null
       }
     }
   },

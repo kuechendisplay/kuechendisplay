@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-27T07:41:23.720Z",
+  "updated": "2026-11-27T09:29:42.221Z",
   "days": {
     "2026-11-27": {
       "dish": {
@@ -40,6 +40,20 @@
       "url": "https://www.youtube.com/watch?v=gZ_SXpeFVVg",
       "image": "https://i.ytimg.com/vi/gZ_SXpeFVVg/mqdefault.jpg",
       "published": "2026-11-26T13:00:24+00:00"
+    },
+    {
+      "id": "S-tnIyDF1Tw",
+      "title": "ES BRENNT BEI IHM UNTEN 😳 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=S-tnIyDF1Tw",
+      "image": "https://i.ytimg.com/vi/S-tnIyDF1Tw/mqdefault.jpg",
+      "published": "2026-11-25T13:00:04+00:00"
+    },
+    {
+      "id": "ViyuCqRtat0",
+      "title": "OMG! DAS SÜSSESTE RENTNER DATE EVER! 😍 First Dates 💔",
+      "url": "https://www.youtube.com/watch?v=ViyuCqRtat0",
+      "image": "https://i.ytimg.com/vi/ViyuCqRtat0/mqdefault.jpg",
+      "published": "2026-11-24T13:00:35+00:00"
     }
   ]
 }

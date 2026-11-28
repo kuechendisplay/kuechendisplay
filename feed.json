@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-27T23:12:31.482Z",
+  "updated": "2026-11-28T13:21:09.262Z",
   "days": {
     "2026-11-28": {
       "dish": {
@@ -27,13 +27,20 @@
     }
   },
   "video": {
-    "id": "eZjHf2GOrqs",
-    "title": "\"ICH BIN P0R$0 DARSTELLER!\" 😳 First Dates 💔",
-    "url": "https://www.youtube.com/watch?v=eZjHf2GOrqs",
-    "image": "https://i.ytimg.com/vi/eZjHf2GOrqs/mqdefault.jpg",
-    "published": "2026-11-27T13:00:26+00:00"
+    "id": "KS96KCiTYsE",
+    "title": "1 STUNDE „PEINLICHE MISSVERSTÄNDNISSE“ BEI FIRST DATES! 💔",
+    "url": "https://www.youtube.com/watch?v=KS96KCiTYsE",
+    "image": "https://i.ytimg.com/vi/KS96KCiTYsE/mqdefault.jpg",
+    "published": "2026-11-28T13:00:33+00:00"
   },
   "videos": [
+    {
+      "id": "KS96KCiTYsE",
+      "title": "1 STUNDE „PEINLICHE MISSVERSTÄNDNISSE“ BEI FIRST DATES! 💔",
+      "url": "https://www.youtube.com/watch?v=KS96KCiTYsE",
+      "image": "https://i.ytimg.com/vi/KS96KCiTYsE/mqdefault.jpg",
+      "published": "2026-11-28T13:00:33+00:00"
+    },
     {
       "id": "eZjHf2GOrqs",
       "title": "\"ICH BIN P0R$0 DARSTELLER!\" 😳 First Dates 💔",
